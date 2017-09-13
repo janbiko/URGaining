@@ -63,7 +63,7 @@ public class MainActivity extends Activity {
         quitButton = (Button) findViewById(R.id.quit_button);
         quitButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 finishAndRemoveTask();
             }
         });
