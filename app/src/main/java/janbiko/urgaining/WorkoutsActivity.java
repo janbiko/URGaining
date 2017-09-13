@@ -1,6 +1,7 @@
 package janbiko.urgaining;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
@@ -32,7 +33,8 @@ public class WorkoutsActivity extends Activity
         addRoutineButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Add Routine", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(WorkoutsActivity.this, AddWorkoutPopup.class);
+                startActivity(i);
             }
         });
     }
