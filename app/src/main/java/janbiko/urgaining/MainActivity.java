@@ -17,12 +17,20 @@ public class MainActivity extends Activity {
     private Button quitButton;
     private TextView totalTextView;
 
+    public WorkoutsDatabase workoutsDB;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initDatabase();
         initUI();
+    }
+
+    private void initDatabase() {
+        workoutsDB = new WorkoutsDatabase(this);
+        workoutsDB.open();
     }
 
     private void initUI() {

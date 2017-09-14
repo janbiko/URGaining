@@ -10,4 +10,5 @@
     <string name="workout_name">Name your workout:</string>
     <string name="workout_hint">Name</string>
     <string name="create_button">Create</string>
+
 </resources>
