@@ -9,12 +9,10 @@ import java.util.ArrayList;
 public class Exercise {
 
     private String name;
-    private ArrayList<Integer> weight;
-    private ArrayList<int[]> sets;
+    private ArrayList<Integer> sets;
 
-    public Exercise(String name, ArrayList<Integer> weight, ArrayList<int[]> sets){
+    public Exercise(String name, ArrayList<Integer> sets){
         this.name = name;
-        this.weight = weight;
         this.sets = sets;
 
     }
@@ -23,11 +21,9 @@ public class Exercise {
         return name;
     }
 
-    public ArrayList<Integer> getWeight() {
-        return weight;
-    }
 
-    public ArrayList<int[]> getSets() {
+
+    public ArrayList<Integer> getSets() {
         return sets;
     }
 }

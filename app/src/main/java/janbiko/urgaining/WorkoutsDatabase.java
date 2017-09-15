@@ -18,25 +18,39 @@ public class WorkoutsDatabase {
     private static final int DATABASE_VERSION = 1;
 
     private static final String DATABASE_TABLE_WORKOUTS = "workouts";
+    private static final String DATABASE_TABLE_EXERCISES = "exercises";
 
     private static final String KEY_ID = "_id";
     private static final String KEY_WORKOUT = "workout";
+    private static final String KEY_EXERCISE = "exercise";
 
     private static final int COLUMN_WORKOUT_INDEX = 1;
 
     private WorkoutDBOpenHelper workoutDBHelper;
+    private ExerciseDBOpenHelper exerciseDBOpenHelper;
     private SQLiteDatabase db;
 
 
     public WorkoutsDatabase(Context context) {
         workoutDBHelper = new WorkoutDBOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION);
+        exerciseDBOpenHelper = new ExerciseDBOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    public void open() throws SQLException {
-        try {
-            db = workoutDBHelper.getWritableDatabase();
-        } catch (SQLException e) {
-            db = workoutDBHelper.getReadableDatabase();
+    public void open(String database) throws SQLException {
+        if (database.equals(DATABASE_TABLE_WORKOUTS)) {
+            try {
+                db = workoutDBHelper.getWritableDatabase();
+            } catch (SQLException e) {
+                db = workoutDBHelper.getReadableDatabase();
+            }
+        } else if (database.equals(DATABASE_TABLE_EXERCISES)) {
+            try {
+                db = exerciseDBOpenHelper.getWritableDatabase();
+            } catch (SQLException e) {
+                db = exerciseDBOpenHelper.getReadableDatabase();
+            }
+        } else {
+            throw new SQLException();
         }
     }
 
@@ -50,10 +64,18 @@ public class WorkoutsDatabase {
         return db.insert(DATABASE_TABLE_WORKOUTS, null, itemValues);
     }
 
+    public long insertExerciseItem(Exercise item) {
+        return 0;
+    }
+
     public void removeWorkoutItem(String item) {
         String toDelete = KEY_WORKOUT + "=?";
         String[] deleteArguments = new String[]{item};
         db.delete(DATABASE_TABLE_WORKOUTS, toDelete, deleteArguments);
+    }
+
+    public void removeExerciseItem(Exercise item) {
+
     }
 
     public ArrayList<String> getAllWorkoutItems() {
@@ -83,6 +105,28 @@ public class WorkoutsDatabase {
                 " text not null);";
 
         public WorkoutDBOpenHelper(Context c, String dbName, SQLiteDatabase.CursorFactory factory, int version) {
+            super(c, dbName, factory, version);
+        }
+
+        @Override
+        public void onCreate(SQLiteDatabase db) {
+            db.execSQL(DATABASE_CREATE);
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+        }
+    }
+
+    private class ExerciseDBOpenHelper extends SQLiteOpenHelper {
+
+        private static final String DATABASE_CREATE = "create table " +
+                DATABASE_TABLE_EXERCISES + " (" + KEY_ID +
+                " integer primary key autoincrement, " + KEY_EXERCISE +
+                " text not null);";
+
+        public ExerciseDBOpenHelper(Context c, String dbName, SQLiteDatabase.CursorFactory factory, int version) {
             super(c, dbName, factory, version);
         }
 

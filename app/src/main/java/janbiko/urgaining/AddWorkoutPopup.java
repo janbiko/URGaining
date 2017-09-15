@@ -32,7 +32,7 @@ public class AddWorkoutPopup extends Activity{
 
     private void initDatabase() {
         workoutsDatabase = new WorkoutsDatabase(this);
-        workoutsDatabase.open();
+        workoutsDatabase.open("workouts");
     }
 
     private void initUI() {

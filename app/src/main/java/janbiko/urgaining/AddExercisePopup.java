@@ -23,13 +23,21 @@ public class AddExercisePopup extends Activity{
     private Spinner setCountSpinner;
     private ArrayAdapter<Integer> spinnerAdapter;
 
+    private WorkoutsDatabase workoutsDB;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.popup_add_exercise);
         setPopupWindowSize();
+        initDatabase();
         initUI();
+    }
+
+    private void initDatabase() {
+        workoutsDB = new WorkoutsDatabase(this);
+        //workoutsDB.open("exercises");
     }
 
     private void initUI() {
