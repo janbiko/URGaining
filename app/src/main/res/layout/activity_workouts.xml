@@ -10,7 +10,7 @@
     tools:context="janbiko.urgaining.WorkoutsActivity">
 
     <ListView
-        android:id="@+id/workout_names_list"
+        android:id="@+id/names_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:animateLayoutChanges="true"
@@ -24,7 +24,7 @@
         android:orientation="horizontal">
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/add_routine_button"
+            android:id="@+id/add_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"

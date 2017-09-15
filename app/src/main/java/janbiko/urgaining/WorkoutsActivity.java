@@ -47,7 +47,7 @@ public class WorkoutsActivity extends Activity
     }
 
     private void initListViews() {
-        workoutNamesList = (ListView) findViewById(R.id.workout_names_list);
+        workoutNamesList = (ListView) findViewById(R.id.names_list);
         workoutNamesList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view,
@@ -59,8 +59,11 @@ public class WorkoutsActivity extends Activity
         workoutNamesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Toast.makeText(getApplicationContext(), "Show " + listItems.get(position) +
-                        " workout.", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Show " + listItems.get(position) +
+                //        " workout.", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(WorkoutsActivity.this, ExercisesActivity.class);
+                i.putExtra("WorkoutName", listItems.get(position));
+                startActivity(i);
             }
         });
 
@@ -91,7 +94,7 @@ public class WorkoutsActivity extends Activity
     }
 
     private void initButtons() {
-        addRoutineButton = (FloatingActionButton) findViewById(R.id.add_routine_button);
+        addRoutineButton = (FloatingActionButton) findViewById(R.id.add_button);
         addRoutineButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
