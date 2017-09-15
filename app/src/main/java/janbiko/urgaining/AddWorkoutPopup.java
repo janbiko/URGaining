@@ -84,7 +84,7 @@ public class AddWorkoutPopup extends Activity{
     }
 
     private void setPopupWindowSize() {
-        // getting screen size of used device and setting popupwindow size in relation to given size
+        // getting screen size of used device and setting popup window size in relation to given size
         float popupWindowWidth = 0.75f;
         float popupWindowHeight = 0.25f;
 

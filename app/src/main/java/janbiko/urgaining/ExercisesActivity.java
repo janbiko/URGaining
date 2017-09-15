@@ -1,6 +1,7 @@
 package janbiko.urgaining;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -58,7 +59,8 @@ public class ExercisesActivity extends Activity {
         addExerciseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Add exercise.", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(ExercisesActivity.this, AddExercisePopup.class);
+                startActivity(i);
             }
         });
     }

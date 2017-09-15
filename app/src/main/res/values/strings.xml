@@ -11,4 +11,23 @@
     <string name="workout_hint">Name</string>
     <string name="create_button">Create</string>
 
+    <string name="exercise_name">Exercise name:</string>
+    <string name="set_count">Amount of sets:</string>
+    <integer-array name="amount_sets">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+    </integer-array>
 </resources>

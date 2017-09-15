@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorAccent"
+    android:paddingEnd="25dp"
+    android:paddingStart="5dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/exercise_name"
+        android:textSize="12sp"
+        android:ellipsize="end"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/exercise_name"
+        android:textSize="12sp"
+        android:layout_marginTop="10dp"
+        android:hint="@string/workout_hint"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:layout_marginTop="50dp"
+        android:text="@string/set_count"/>
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/set_count_spinner"
+        android:layout_marginTop="70dp"/>
+
+    <Button
+        android:id="@+id/create_exercise_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/create_button"
+        android:background="@color/colorPrimary"
+        android:layout_marginTop="50dp"
+        android:layout_alignParentEnd="true"/>
+
+</RelativeLayout>

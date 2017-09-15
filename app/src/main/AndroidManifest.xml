@@ -28,6 +28,10 @@
         <activity android:name=".ExercisesActivity"
             android:screenOrientation="portrait">
         </activity>
+        <activity android:name=".AddExercisePopup"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.PopupTheme">
+        </activity>
     </application>
 
 </manifest>
