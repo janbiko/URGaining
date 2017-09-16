@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Color;
 
 import java.util.ArrayList;
 
@@ -24,13 +25,15 @@ public class WorkoutsDatabase {
     private static final String KEY_WORKOUT = "workout";
     private static final String KEY_EXERCISE = "exercise";
     private static final String KEY_SETS = "sets";
+    private static final String KEY_WORKOUT_NAME = "workoutname";
 
     private static final int COLUMN_WORKOUT_INDEX = 1;
     private static final int COLUMN_EXERCISE_INDEX = 1;
     private static final int COLUMN_SETS_INDEX = 2;
+    private static final int COLUMN_WORKOUT_NAME_INDEX = 3;
 
     private WorkoutDBOpenHelper workoutDBHelper;
-    private ExerciseDBOpenHelper exerciseDBOpenHelper;
+    //private ExerciseDBOpenHelper exerciseDBOpenHelper;
     private SQLiteDatabase db;
 
 
@@ -71,7 +74,8 @@ public class WorkoutsDatabase {
         ContentValues itemValues = new ContentValues();
         itemValues.put(KEY_EXERCISE, item.getName());
         itemValues.put(KEY_SETS, item.getSets());
-        return db.insert(DATABASE_TABLE_EXERCISES, null ,itemValues);
+        itemValues.put(KEY_WORKOUT_NAME, item.getWorkoutName());
+        return db.insert(DATABASE_TABLE_EXERCISES, null, itemValues);
     }
 
     public void removeWorkoutItem(String item) {
@@ -106,13 +110,14 @@ public class WorkoutsDatabase {
     public ArrayList<Exercise> getAllExerciseItems() {
         ArrayList<Exercise> items = new ArrayList<Exercise>();
         Cursor cursor = db.query(DATABASE_TABLE_EXERCISES, new String[] { KEY_ID, KEY_EXERCISE,
-        KEY_SETS}, null, null, null, null, null);
+        KEY_SETS, KEY_WORKOUT_NAME}, null, null, null, null, null);
         if (cursor.moveToFirst()) {
             do {
                 String exercise = cursor.getString(COLUMN_EXERCISE_INDEX);
                 int sets = cursor.getInt(COLUMN_SETS_INDEX);
+                String workoutName = cursor.getString(COLUMN_WORKOUT_NAME_INDEX);
 
-                items.add(new Exercise(exercise, sets));
+                items.add(new Exercise(exercise, sets, workoutName));
             } while (cursor.moveToNext());
         }
         return items;
@@ -129,7 +134,8 @@ public class WorkoutsDatabase {
         private static final String DATABASE_CREATE_EXERCISES = "create table " +
                 DATABASE_TABLE_EXERCISES + " (" + KEY_ID +
                 " integer primary key autoincrement, " + KEY_EXERCISE +
-                " text not null, " + KEY_SETS + " not null);";
+                " text not null, " + KEY_SETS + " not null, " + KEY_WORKOUT_NAME +
+                " text not null);";
 
         public WorkoutDBOpenHelper(Context c, String dbName, SQLiteDatabase.CursorFactory factory, int version) {
             super(c, dbName, factory, version);
@@ -146,7 +152,7 @@ public class WorkoutsDatabase {
 
         }
     }
-
+    /*
     private class ExerciseDBOpenHelper extends SQLiteOpenHelper {
 
         private static final String DATABASE_CREATE = "create table " +
@@ -167,7 +173,7 @@ public class WorkoutsDatabase {
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         }
-    }
+    }*/
 }
 
 

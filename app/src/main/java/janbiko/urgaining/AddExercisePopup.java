@@ -23,6 +23,7 @@ public class AddExercisePopup extends Activity{
     private Spinner setCountSpinner;
     private ArrayAdapter<Integer> spinnerAdapter;
 
+    private String  workoutName;
     private WorkoutsDatabase workoutsDB;
 
     @Override
@@ -31,8 +32,13 @@ public class AddExercisePopup extends Activity{
 
         setContentView(R.layout.popup_add_exercise);
         setPopupWindowSize();
+        getWorkoutName();
         initDatabase();
         initUI();
+    }
+
+    private void getWorkoutName(){
+        workoutName = getIntent().getStringExtra("WorkoutName");
     }
 
     private void initDatabase() {
@@ -67,7 +73,7 @@ public class AddExercisePopup extends Activity{
          //       Toast.LENGTH_SHORT).show();
         String exerciseName = nameInput.getText().toString();
         int sets = (int) setCountSpinner.getSelectedItem();
-        Exercise exercise = new Exercise(exerciseName, sets);
+        Exercise exercise = new Exercise(exerciseName, sets, workoutName);
 
         if (exerciseName.equals("")) {
             Toast.makeText(getApplicationContext(), "Please enter a valid name.",

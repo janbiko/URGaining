@@ -27,7 +27,7 @@ public class ExercisesActivity extends Activity {
         setContentView(R.layout.activity_workouts);
 
         getWorkoutName();
-        Toast.makeText(this, workoutName, Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, workoutName, Toast.LENGTH_LONG).show();
         
         initUI();
     }
@@ -60,6 +60,7 @@ public class ExercisesActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(ExercisesActivity.this, AddExercisePopup.class);
+                i.putExtra("WorkoutName", workoutName);
                 startActivity(i);
             }
         });
