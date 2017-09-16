@@ -23,7 +23,7 @@ public class AddExercisePopup extends Activity{
     private Spinner setCountSpinner;
     private ArrayAdapter<Integer> spinnerAdapter;
 
-    private String  workoutName;
+    private String workoutName;
     private WorkoutsDatabase workoutsDB;
 
     @Override

@@ -84,9 +84,9 @@ public class WorkoutsDatabase {
         db.delete(DATABASE_TABLE_WORKOUTS, toDelete, deleteArguments);
     }
 
-    public void removeExerciseItem(Exercise item) {
+    public void removeExerciseItem(String item) {
         String toDelete = KEY_EXERCISE + "=?";
-        String[] deleteArguments = new String[]{item.getName()};
+        String[] deleteArguments = new String[]{item};
         db.delete(DATABASE_TABLE_EXERCISES, toDelete, deleteArguments);
     }
 

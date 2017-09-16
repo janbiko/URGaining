@@ -21,8 +21,8 @@ public class WorkoutsActivity extends Activity
 
     private FloatingActionButton addRoutineButton;
     private WorkoutsDatabase workoutsDB;
-    private ListView workoutNamesList;
 
+    private ListView workoutNamesList;
     private ArrayList<String> listItems = new ArrayList<>();
     private ArrayAdapter<String> listAdapter;
 
@@ -34,6 +34,12 @@ public class WorkoutsActivity extends Activity
 
         initDatabase();
         initUI();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshArrayList();
     }
 
     private void initDatabase() {
@@ -59,8 +65,6 @@ public class WorkoutsActivity extends Activity
         workoutNamesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                //Toast.makeText(getApplicationContext(), "Show " + listItems.get(position) +
-                //        " workout.", Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(WorkoutsActivity.this, ExercisesActivity.class);
                 i.putExtra("WorkoutName", listItems.get(position));
                 startActivity(i);
