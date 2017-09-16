@@ -32,7 +32,7 @@ public class AddWorkoutPopup extends Activity{
 
     private void initDatabase() {
         workoutsDatabase = new WorkoutsDatabase(this);
-        workoutsDatabase.open("workouts");
+        workoutsDatabase.open(/*"workouts"*/);
     }
 
     private void initUI() {
@@ -76,7 +76,7 @@ public class AddWorkoutPopup extends Activity{
     }
 
     private boolean workoutAlreadyExisting(String name) {
-        // checks if workoutname already exists in the database
+        // checks if workout name already exists in the database
         for (int i = 0; i < workoutsDatabase.getAllWorkoutItems().size(); i++) {
             if (name.equals(workoutsDatabase.getAllWorkoutItems().get(i))) return true;
         }

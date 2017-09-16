@@ -38,7 +38,7 @@ public class WorkoutsActivity extends Activity
 
     private void initDatabase() {
         workoutsDB = new WorkoutsDatabase(this);
-        workoutsDB.open("workouts");
+        workoutsDB.open(/*"workouts"*/);
     }
 
     private void initUI() {

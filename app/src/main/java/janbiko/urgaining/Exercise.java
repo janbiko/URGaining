@@ -9,9 +9,9 @@ import java.util.ArrayList;
 public class Exercise {
 
     private String name;
-    private ArrayList<Integer> sets;
+    private int sets;
 
-    public Exercise(String name, ArrayList<Integer> sets){
+    public Exercise(String name, int sets){
         this.name = name;
         this.sets = sets;
 
@@ -23,7 +23,7 @@ public class Exercise {
 
 
 
-    public ArrayList<Integer> getSets() {
+    public int getSets() {
         return sets;
     }
 }

@@ -37,7 +37,7 @@ public class AddExercisePopup extends Activity{
 
     private void initDatabase() {
         workoutsDB = new WorkoutsDatabase(this);
-        //workoutsDB.open("exercises");
+        workoutsDB.open(/*"exercises"*/);
     }
 
     private void initUI() {
@@ -62,9 +62,34 @@ public class AddExercisePopup extends Activity{
     }
 
     private void saveExerciseToDatabase() {
-        Toast.makeText(getApplicationContext(), nameInput.getText().toString() +
-                        setCountSpinner.getSelectedItem().toString(),
-                Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), nameInput.getText().toString() +
+         //               setCountSpinner.getSelectedItem().toString(),
+         //       Toast.LENGTH_SHORT).show();
+        String exerciseName = nameInput.getText().toString();
+        int sets = (int) setCountSpinner.getSelectedItem();
+        Exercise exercise = new Exercise(exerciseName, sets);
+
+        if (exerciseName.equals("")) {
+            Toast.makeText(getApplicationContext(), "Please enter a valid name.",
+                    Toast.LENGTH_SHORT).show();
+        }
+        else if (!exerciseAlreadyExisting(exerciseName)) {
+            workoutsDB.insertExerciseItem(exercise);
+            Toast.makeText(getApplicationContext(), exerciseName + " created.",
+                    Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Exercise name is already taken.",
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private boolean exerciseAlreadyExisting(String name) {
+        // checks if exercise name already exists in the database
+        for (int i = 0; i < workoutsDB.getAllExerciseItems().size(); i++) {
+            if (name.equals(workoutsDB.getAllExerciseItems().get(i).getName())) return true;
+        }
+        return false;
     }
 
     private void initSpinner() {
