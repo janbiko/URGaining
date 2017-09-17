@@ -69,8 +69,10 @@ public class ExercisesActivity extends Activity {
 
         exerciseNamesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getApplicationContext(), "Item clicked.", Toast.LENGTH_SHORT).show();
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Intent i = new Intent(ExercisesActivity.this, ExerciseDetails.class);
+                i.putExtra("ExerciseName", listItems.get(position));
+                startActivity(i);
             }
         });
 

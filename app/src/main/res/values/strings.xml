@@ -30,4 +30,8 @@
         <item>14</item>
         <item>15</item>
     </integer-array>
+
+    <string name="exercise_name_placeholder">Exercise</string>
+    <string name="weight">Weight</string>
+    <string name="values_hint">0</string>
 </resources>

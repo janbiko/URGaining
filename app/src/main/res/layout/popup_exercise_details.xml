@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorAccent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/name_exercise"
+        android:textSize="17sp"
+        android:paddingTop="5dp"
+        android:paddingStart="5dp"
+        android:paddingEnd="0dp"
+        android:text="@string/exercise_name_placeholder"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginTop="50dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/titles">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/weight"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/values_input"
+            android:layout_marginTop="15dp">
+
+            <EditText
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:inputType="numberDecimal"
+                android:singleLine="true"
+                android:hint="@string/values_hint"/>
+            <!--
+            <EditText
+                android:layout_width="25dp"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_marginLeft="12dp"
+                android:hint="@string/values_hint"/>
+            -->
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
