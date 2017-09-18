@@ -75,7 +75,11 @@ public class ExerciseDetails extends Activity{
     }
 
     private void addValuesToDatabase(){
+        //ExerciseValues exerciseValues = getExerciseValues();
+    }
 
+    private ExerciseValues getExerciseValues() {
+        return null;
     }
 
     private void createStoredValuesTextViews() {
