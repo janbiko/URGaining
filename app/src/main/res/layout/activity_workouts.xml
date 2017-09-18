@@ -9,19 +9,21 @@
     android:background="@color/colorPrimaryDark"
     tools:context="janbiko.urgaining.WorkoutsActivity">
 
+
     <ListView
         android:id="@+id/names_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:animateLayoutChanges="true"
-        android:padding="10dp" />
+        android:background="@color/colorAccent"
+        android:padding="10dp"/>
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:gravity="end"
-        android:orientation="horizontal">
+        android:layout_marginBottom="55dp"
+        android:gravity="end">
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/add_button"
@@ -30,8 +32,20 @@
             android:clickable="true"
             android:layout_marginBottom="10dp"
             android:layout_marginEnd="10dp"
+
             app:fabSize="normal"
             app:srcCompat="@android:drawable/ic_input_add" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <include layout="@layout/bottom_navigation"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"/>
     </LinearLayout>
 
 </RelativeLayout>

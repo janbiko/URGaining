@@ -3,7 +3,10 @@ package janbiko.urgaining;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -50,6 +53,27 @@ public class WorkoutsActivity extends Activity
     private void initUI() {
         initButtons();
         initListViews();
+
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch(item.getItemId())
+                {
+                    case R.id.navigation_progress:
+                        Toast.makeText(WorkoutsActivity.this, "1", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.navigation_workout:
+                        Intent i = new Intent(WorkoutsActivity.this, WorkoutsActivity.class);
+                        startActivity(i);
+                        break;
+                    case R.id.navigation_settings:
+                        Toast.makeText(WorkoutsActivity.this, "3", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
     private void initListViews() {
