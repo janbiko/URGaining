@@ -20,6 +20,7 @@ public class WorkoutsDatabase {
 
     private static final String DATABASE_TABLE_WORKOUTS = "workouts";
     private static final String DATABASE_TABLE_EXERCISES = "exercises";
+    private static final String DATABASE_TABLE_EXERCISE_VALUES = "exercisevalues";
 
     private static final String KEY_ID = "_id";
     private static final String KEY_WORKOUT = "workout";
@@ -136,6 +137,10 @@ public class WorkoutsDatabase {
                 " integer primary key autoincrement, " + KEY_EXERCISE +
                 " text not null, " + KEY_SETS + " not null, " + KEY_WORKOUT_NAME +
                 " text not null);";
+
+        private static final String  DATABASE_CREATE_EXERCISE_VALUES = "create table " +
+                DATABASE_TABLE_EXERCISE_VALUES + " (" + KEY_ID +
+                " integer primary key autoincrement, " + KEY_EXERCISE;
 
         public WorkoutDBOpenHelper(Context c, String dbName, SQLiteDatabase.CursorFactory factory, int version) {
             super(c, dbName, factory, version);

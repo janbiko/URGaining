@@ -6,9 +6,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.solver.SolverVariable;
 import android.text.InputType;
+import android.text.Layout;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -26,11 +28,13 @@ import java.util.Set;
 
 public class ExerciseDetails extends Activity{
 
+    private int pseudoWert = 5;
+
     private String exerciseName;
     private int sets;
     private TextView exercise;
     private Button addValuesButton;
-
+    private LinearLayout exerciseDetails;
     private WorkoutsDatabase workoutsDB;
 
     //private HashMap<String, Integer> idsMap = new HashMap<>();
@@ -52,8 +56,10 @@ public class ExerciseDetails extends Activity{
     }
 
     private void initUI() {
+        exerciseDetails = (LinearLayout) findViewById(R.id.exercise_details);
         initTextViews();
         createEditTextsAndTextViews();
+        createStoredValuesTextViews();
         initButtons();
     }
 
@@ -70,6 +76,71 @@ public class ExerciseDetails extends Activity{
 
     private void addValuesToDatabase(){
 
+    }
+
+    private void createStoredValuesTextViews() {
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        int layoutMarginTopPX = 15;
+        int layoutMarginTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                layoutMarginTopPX, getResources().getDisplayMetrics());
+        layoutParams.setMargins(0, layoutMarginTop, 0, 0);
+
+        for (int i = 0; i < pseudoWert; i++) {
+            LinearLayout linearLayout = new LinearLayout(this);
+            TextView weightTextView = createWeightTextView();
+            linearLayout.addView(weightTextView, createWeightLayoutParams());
+            for (int j = 0; j < sets; j++) {
+                TextView repsTextView = createValuesTextView();
+                linearLayout.addView(repsTextView, createRepsLayoutParams());
+            }
+            exerciseDetails.addView(linearLayout, layoutParams);
+        }
+    }
+
+    private LinearLayout.LayoutParams createWeightLayoutParams() {
+        int textViewWidthPX = 25;
+        int textViewWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                textViewWidthPX, getResources().getDisplayMetrics());
+        int textViewMarginEndPX = 14;
+        int textViewMarginEnd = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                textViewMarginEndPX, getResources().getDisplayMetrics());
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                textViewWidth, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMarginEnd(textViewMarginEnd);
+
+        return layoutParams;
+    }
+
+    private LinearLayout.LayoutParams createRepsLayoutParams() {
+        int textViewWidthPX = 25;
+        int textViewWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                textViewWidthPX, getResources().getDisplayMetrics());
+        int textViewMarginStartPX = 8;
+        int textViewMarginStart= (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                textViewMarginStartPX, getResources().getDisplayMetrics());
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                textViewWidth, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMarginStart(textViewMarginStart);
+
+        return layoutParams;
+    }
+
+    private TextView createValuesTextView() {
+        TextView textView = new TextView(this);
+        //TODO: remove later
+        textView.setText("5");
+
+        return textView;
+    }
+
+    private TextView createWeightTextView() {
+        TextView textView =  new TextView(this);
+        //TODO: remove later
+        textView.setText("100");
+
+        return textView;
     }
 
     private void createEditTextsAndTextViews() {
