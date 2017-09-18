@@ -8,6 +8,7 @@ import android.support.constraint.solver.SolverVariable;
 import android.text.InputType;
 import android.text.Layout;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +39,10 @@ public class ExerciseDetails extends Activity{
     private LinearLayout exerciseDetails;
     private WorkoutsDatabase workoutsDB;
 
+    private LinearLayout setCounter1;
+    private LinearLayout kg1;
+    private LinearLayout reps1;
+
     //private HashMap<String, Integer> idsMap = new HashMap<>();
 
     @Override
@@ -48,7 +54,9 @@ public class ExerciseDetails extends Activity{
         initDatabase();
         getSets();
         initUI();
+
     }
+
 
     private void initDatabase() {
         workoutsDB = new WorkoutsDatabase(this);
@@ -56,11 +64,30 @@ public class ExerciseDetails extends Activity{
     }
 
     private void initUI() {
-        exerciseDetails = (LinearLayout) findViewById(R.id.exercise_details);
+        //exerciseDetails = (LinearLayout) findViewById(R.id.exercise_details);
         initTextViews();
-        createEditTextsAndTextViews();
-        createStoredValuesTextViews();
+        //createEditTextsAndTextViews();
+        //createStoredValuesTextViews();
         initButtons();
+        deleteUnusedViews();
+    }
+
+    private void deleteUnusedViews() {
+        setCounter1 = (LinearLayout) findViewById(R.id.set_counter_1);
+        LinearLayout setCounter2 = (LinearLayout) findViewById(R.id.set_counter_2);
+        kg1 = (LinearLayout) findViewById(R.id.kg1);
+        LinearLayout kg2 = (LinearLayout) findViewById(R.id.kg2);
+        reps1 = (LinearLayout) findViewById(R.id.reps1);
+        LinearLayout reps2 = (LinearLayout) findViewById(R.id.reps2);
+        //int i = setCounter1.getChildCount() - 1;
+        for (int i = setCounter1.getChildCount() - 1; i > sets; i--) {
+            setCounter1.removeViewAt(i);
+            setCounter2.removeViewAt(i);
+            kg1.removeViewAt(i);
+            kg2.removeViewAt(i);
+            reps1.removeViewAt(i);
+            reps2.removeViewAt(i);
+        }
     }
 
     private void initButtons() {
@@ -75,13 +102,37 @@ public class ExerciseDetails extends Activity{
     }
 
     private void addValuesToDatabase(){
-        //ExerciseValues exerciseValues = getExerciseValues();
+        ArrayList<Float> exerciseValues = getExerciseValues();
+        if (exerciseValues.size() != sets * 2) {
+            Toast.makeText(getApplicationContext(), "Please enter valid numbers.",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
-    private ExerciseValues getExerciseValues() {
-        return null;
-    }
+    private ArrayList<Float> getExerciseValues() {
+        ArrayList<Float> values = new ArrayList<>();
+        EditText editText;
+        float value;
 
+        for (int i = 1; i < setCounter1.getChildCount(); i++) {
+            editText = (EditText) kg1.getChildAt(i);
+            if (editText.getText().toString().equals("")) {
+                return values;
+            }
+            value = Float.parseFloat(editText.getText().toString());
+            values.add(value);
+
+            editText = (EditText) reps1.getChildAt(i);
+            if (editText.getText().toString().equals("")) {
+                return values;
+            }
+            value = Float.parseFloat(editText.getText().toString());
+            values.add(value);
+        }
+
+        return values;
+    }
+    /*
     private void createStoredValuesTextViews() {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -200,7 +251,7 @@ public class ExerciseDetails extends Activity{
         else if (i == 6) return R.id.id6;
         else if (i == 7) return R.id.id7;
         else return R.id.id8;
-    }
+    }   */
 
     private void initTextViews() {
         exercise = (TextView) findViewById(R.id.name_exercise);
@@ -218,13 +269,13 @@ public class ExerciseDetails extends Activity{
                 break;
             }
         }
-        Toast.makeText(this, "" + sets, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "" + sets, Toast.LENGTH_SHORT).show();
     }
 
     private void setPopupWindowSize() {
         // getting screen size of used device and setting popup window size in relation to given size
-        float popupWindowWidth = 0.9f;
-        float popupWindowHeight = 0.9f;
+        float popupWindowWidth = 0.95f;
+        float popupWindowHeight = 0.95f;
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
