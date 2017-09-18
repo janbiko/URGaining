@@ -13,6 +13,7 @@
 
     <string name="exercise_name">Exercise name:</string>
     <string name="set_count">Amount of sets:</string>
+    <!--
     <integer-array name="amount_sets">
         <item>1</item>
         <item>2</item>
@@ -30,8 +31,11 @@
         <item>14</item>
         <item>15</item>
     </integer-array>
+    -->
 
     <string name="exercise_name_placeholder">Exercise</string>
     <string name="weight">Weight</string>
     <string name="values_hint">0</string>
+
+    <string name="add_values_button">Finish</string>
 </resources>

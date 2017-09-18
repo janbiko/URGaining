@@ -2,15 +2,23 @@ package janbiko.urgaining;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.solver.SolverVariable;
 import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Jannik on 17.09.2017.
@@ -21,8 +29,11 @@ public class ExerciseDetails extends Activity{
     private String exerciseName;
     private int sets;
     private TextView exercise;
+    private Button addValuesButton;
 
     private WorkoutsDatabase workoutsDB;
+
+    //private HashMap<String, Integer> idsMap = new HashMap<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,6 +54,22 @@ public class ExerciseDetails extends Activity{
     private void initUI() {
         initTextViews();
         createEditTextsAndTextViews();
+        initButtons();
+    }
+
+    private void initButtons() {
+        addValuesButton = (Button) findViewById(R.id.add_values_button);
+        addValuesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addValuesToDatabase();
+                //finish();
+            }
+        });
+    }
+
+    private void addValuesToDatabase(){
+
     }
 
     private void createEditTextsAndTextViews() {
@@ -82,8 +109,22 @@ public class ExerciseDetails extends Activity{
             editText.setRawInputType(InputType.TYPE_CLASS_NUMBER);
             editText.setTextSize(editTextTextSize);
             editText.setSingleLine(true);
+
+            editText.setId(assignId(i));
+
             valuesInput.addView(editText, layoutParamsEditTexts);
         }
+    }
+
+    private int assignId(int i) {
+        if (i == 1) return R.id.id1;
+        else if (i == 2) return R.id.id2;
+        else if (i == 3) return R.id.id3;
+        else if (i == 4) return R.id.id4;
+        else if (i == 5) return R.id.id5;
+        else if (i == 6) return R.id.id6;
+        else if (i == 7) return R.id.id7;
+        else return R.id.id8;
     }
 
     private void initTextViews() {
@@ -119,4 +160,5 @@ public class ExerciseDetails extends Activity{
         getWindow().setLayout((int) (width * popupWindowWidth),
                 (int) (height * popupWindowHeight));
     }
+
 }
