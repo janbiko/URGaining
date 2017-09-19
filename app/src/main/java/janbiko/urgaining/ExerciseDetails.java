@@ -30,7 +30,7 @@ import java.util.Set;
 
 public class ExerciseDetails extends Activity{
 
-    private int pseudoWert = 5;
+    private int exerciseValuesSize = 16;
 
     private String exerciseName;
     private int sets;
@@ -42,6 +42,8 @@ public class ExerciseDetails extends Activity{
     private LinearLayout setCounter1;
     private LinearLayout kg1;
     private LinearLayout reps1;
+    private LinearLayout kg2;
+    private LinearLayout reps2;
 
     //private HashMap<String, Integer> idsMap = new HashMap<>();
 
@@ -70,15 +72,33 @@ public class ExerciseDetails extends Activity{
         //createStoredValuesTextViews();
         initButtons();
         deleteUnusedViews();
+        fillInLatestExerciseValues();
+    }
+
+    private void fillInLatestExerciseValues() {
+        ArrayList<Float> latestValues = workoutsDB.getLatestExerciseValuesItem(exerciseName);
+        if (latestValues.size() == exerciseValuesSize) {
+            int j = 0;
+            for (int i = 1; i < kg2.getChildCount(); i++) {
+                TextView kgTextView = (TextView) kg2.getChildAt(i);
+                kgTextView.setText(latestValues.get(j).toString());
+
+                TextView repsTextView = (TextView) reps2.getChildAt(i);
+                int val = Math.round(latestValues.get(j + 1));
+                repsTextView.setText("" + val);
+
+                j += 2;
+            }
+        }
     }
 
     private void deleteUnusedViews() {
         setCounter1 = (LinearLayout) findViewById(R.id.set_counter_1);
         LinearLayout setCounter2 = (LinearLayout) findViewById(R.id.set_counter_2);
         kg1 = (LinearLayout) findViewById(R.id.kg1);
-        LinearLayout kg2 = (LinearLayout) findViewById(R.id.kg2);
+        kg2 = (LinearLayout) findViewById(R.id.kg2);
         reps1 = (LinearLayout) findViewById(R.id.reps1);
-        LinearLayout reps2 = (LinearLayout) findViewById(R.id.reps2);
+        reps2 = (LinearLayout) findViewById(R.id.reps2);
         //int i = setCounter1.getChildCount() - 1;
         for (int i = setCounter1.getChildCount() - 1; i > sets; i--) {
             setCounter1.removeViewAt(i);
@@ -96,7 +116,6 @@ public class ExerciseDetails extends Activity{
             @Override
             public void onClick(View view) {
                 addValuesToDatabase();
-                //finish();
             }
         });
     }
@@ -107,12 +126,13 @@ public class ExerciseDetails extends Activity{
         if (exerciseValues.size() != sets * 2) {
             Toast.makeText(getApplicationContext(), "Please enter valid numbers.",
                     Toast.LENGTH_SHORT).show();
-        } else if (exerciseValues.size() == sets * 2 && exerciseValues.size() <= 16) {
-            while (exerciseValues.size() < 16) {
+        } else if (exerciseValues.size() == sets * 2 && exerciseValues.size() <= exerciseValuesSize) {
+            while (exerciseValues.size() < exerciseValuesSize) {
                 exerciseValues.add(-1f);
             }
             Toast.makeText(getApplicationContext(), "Added succesfully.", Toast.LENGTH_SHORT).show();
             workoutsDB.insertExerciseValuesItem(exerciseName, exerciseValues, timeStamp);
+            finish();
         }
 
         ArrayList<Float> test = workoutsDB.getLatestExerciseValuesItem(exerciseName);
