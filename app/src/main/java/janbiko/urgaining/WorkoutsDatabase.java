@@ -77,31 +77,19 @@ public class WorkoutsDatabase {
 
 
     private WorkoutDBOpenHelper workoutDBHelper;
-    //private ExerciseDBOpenHelper exerciseDBOpenHelper;
     private SQLiteDatabase db;
 
 
     public WorkoutsDatabase(Context context) {
         workoutDBHelper = new WorkoutDBOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION);
-        //exerciseDBOpenHelper = new ExerciseDBOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    public void open(/*String database*/) throws SQLException {
-        //if (database.equals(DATABASE_TABLE_WORKOUTS)) {
-            try {
-                db = workoutDBHelper.getWritableDatabase();
-            } catch (SQLException e) {
-                db = workoutDBHelper.getReadableDatabase();
-            }
-        /*} else if (database.equals(DATABASE_TABLE_EXERCISES)) {
-            try {
-                db = exerciseDBOpenHelper.getWritableDatabase();
-            } catch (SQLException e) {
-                db = exerciseDBOpenHelper.getReadableDatabase();
-            }
-        } else {
-            throw new SQLException();
-        }*/
+    public void open() throws SQLException {
+        try {
+            db = workoutDBHelper.getWritableDatabase();
+        } catch (SQLException e) {
+            db = workoutDBHelper.getReadableDatabase();
+        }
     }
 
     public void close() {
@@ -157,6 +145,12 @@ public class WorkoutsDatabase {
         String toDelete = KEY_EXERCISE + "=?";
         String[] deleteArguments = new String[]{item};
         db.delete(DATABASE_TABLE_EXERCISES, toDelete, deleteArguments);
+    }
+
+    public void removeExerciseValues(String exerciseName) {
+        String toDelete = KEY_EXERCISE + "=?";
+        String[] deleteArguments = new String[]{exerciseName};
+        db.delete(DATABASE_TABLE_EXERCISE_VALUES, toDelete, deleteArguments);
     }
 
     public ArrayList<String> getAllWorkoutItems() {

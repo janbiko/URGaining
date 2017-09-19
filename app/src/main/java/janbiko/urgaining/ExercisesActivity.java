@@ -85,6 +85,7 @@ public class ExercisesActivity extends Activity {
     private void removeExerciseAtPosition(int position) {
         if (listItems.get(position) != null) {
             workoutsDB.removeExerciseItem(listItems.get(position));
+            workoutsDB.removeExerciseValues(listItems.get(position));
             refreshArrayList();
         }
     }
