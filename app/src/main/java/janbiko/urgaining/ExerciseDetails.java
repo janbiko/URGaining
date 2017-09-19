@@ -83,6 +83,25 @@ public class ExerciseDetails extends Activity{
         initButtons();
         deleteUnusedViews();
         fillInLatestExerciseValues();
+        setFocusChangedListeners();
+    }
+
+    private void setFocusChangedListeners() {
+        for (int i = 1; i < kg1.getChildCount(); i++) {
+            final EditText editText = (EditText) kg1.getChildAt(i);
+            final int x = i;
+            editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (!hasFocus) {
+                        for (int j = x +1; j < kg1.getChildCount(); j++) {
+                            EditText sibling = (EditText) kg1.getChildAt(j);
+                            sibling.setText(editText.getText().toString());
+                        }
+                    }
+                }
+            });
+        }
     }
 
     private void fillInLatestExerciseValues() {
@@ -140,7 +159,7 @@ public class ExerciseDetails extends Activity{
             while (exerciseValues.size() < exerciseValuesSize) {
                 exerciseValues.add(-1f);
             }
-            Toast.makeText(getApplicationContext(), "Added succesfully.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Added successfully.", Toast.LENGTH_SHORT).show();
             workoutsDB.insertExerciseValuesItem(exerciseName, exerciseValues, timeStamp);
             finish();
         }
