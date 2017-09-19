@@ -83,6 +83,7 @@ public class WorkoutsActivity extends Activity
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            int position, long id) {
+                // TODO: alle zugehörigen exercise items aus der Datenbank löschen
                 removeWorkoutAtPosition(position);
                 return true;
             }

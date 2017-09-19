@@ -103,10 +103,27 @@ public class ExerciseDetails extends Activity{
 
     private void addValuesToDatabase(){
         ArrayList<Float> exerciseValues = getExerciseValues();
+        long timeStamp = System.currentTimeMillis() / 100;
         if (exerciseValues.size() != sets * 2) {
             Toast.makeText(getApplicationContext(), "Please enter valid numbers.",
                     Toast.LENGTH_SHORT).show();
+        } else if (exerciseValues.size() == sets * 2 && exerciseValues.size() <= 16) {
+            while (exerciseValues.size() < 16) {
+                exerciseValues.add(-1f);
+            }
+            Toast.makeText(getApplicationContext(), "Added succesfully.", Toast.LENGTH_SHORT).show();
+            workoutsDB.insertExerciseValuesItem(exerciseName, exerciseValues, timeStamp);
         }
+
+        ArrayList<Float> test = workoutsDB.getLatestExerciseValuesItem(exerciseName);
+        for (int i = 0; i < test.size(); i++) {
+            Log.i("Wert " + i + ":", test.get(i).toString());
+        }
+
+        /* for Testing
+        for (int i = 0; i < exerciseValues.size(); i++) {
+            Log.i("Wert " + i +":", exerciseValues.get(i).toString());
+        } */
     }
 
     private ArrayList<Float> getExerciseValues() {

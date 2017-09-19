@@ -28,10 +28,53 @@ public class WorkoutsDatabase {
     private static final String KEY_SETS = "sets";
     private static final String KEY_WORKOUT_NAME = "workoutname";
 
+    private static final String KEY_TIME = "time";
+    private static final String KEY_WEIGHT_1 = "weight1";
+    private static final String KEY_SET_1 = "set1";
+    private static final String KEY_WEIGHT_2 = "weight2";
+    private static final String KEY_SET_2 = "set2";
+    private static final String KEY_WEIGHT_3 = "weight3";
+    private static final String KEY_SET_3 = "set3";
+    private static final String KEY_WEIGHT_4 = "weight4";
+    private static final String KEY_SET_4 = "set4";
+    private static final String KEY_WEIGHT_5 = "weight5";
+    private static final String KEY_SET_5 = "set5";
+    private static final String KEY_WEIGHT_6 = "weight6";
+    private static final String KEY_SET_6 = "set6";
+    private static final String KEY_WEIGHT_7 = "weight7";
+    private static final String KEY_SET_7 = "set7";
+    private static final String KEY_WEIGHT_8 = "weight8";
+    private static final String KEY_SET_8 = "set8";
+
+
+
+    // Columns
     private static final int COLUMN_WORKOUT_INDEX = 1;
+
     private static final int COLUMN_EXERCISE_INDEX = 1;
     private static final int COLUMN_SETS_INDEX = 2;
     private static final int COLUMN_WORKOUT_NAME_INDEX = 3;
+
+    private static final int COLUMN_EXERCISE_NAME_INDEX = 1;
+    private static final int COLUMN_TIMESTAMP = 2;
+    private static final int COLUMN_WEIGHT_1 = 3;
+    private static final int COLUMN_SET_1 = 4;
+    private static final int COLUMN_WEIGHT_2 = 5;
+    private static final int COLUMN_SET_2 = 6;
+    private static final int COLUMN_WEIGHT_3 = 7;
+    private static final int COLUMN_SET_3 = 8;
+    private static final int COLUMN_WEIGHT_4 = 9;
+    private static final int COLUMN_SET_4 = 10;
+    private static final int COLUMN_WEIGHT_5 = 11;
+    private static final int COLUMN_SET_5 = 12;
+    private static final int COLUMN_WEIGHT_6 = 13;
+    private static final int COLUMN_SET_6 = 14;
+    private static final int COLUMN_WEIGHT_7 = 15;
+    private static final int COLUMN_SET_7 = 16;
+    private static final int COLUMN_WEIGHT_8 = 17;
+    private static final int COLUMN_SET_8 = 18;
+
+
 
     private WorkoutDBOpenHelper workoutDBHelper;
     //private ExerciseDBOpenHelper exerciseDBOpenHelper;
@@ -79,6 +122,31 @@ public class WorkoutsDatabase {
         return db.insert(DATABASE_TABLE_EXERCISES, null, itemValues);
     }
 
+    public long insertExerciseValuesItem(String exerciseName, ArrayList<Float> exerciseValues,
+                                         long timeStamp) {
+        ContentValues itemValues = new ContentValues();
+        itemValues.put(KEY_EXERCISE, exerciseName);
+        itemValues.put(KEY_TIME, timeStamp);
+        itemValues.put(KEY_WEIGHT_1, exerciseValues.get(0));
+        itemValues.put(KEY_SET_1, exerciseValues.get(1));
+        itemValues.put(KEY_WEIGHT_2, exerciseValues.get(2));
+        itemValues.put(KEY_SET_2, exerciseValues.get(3));
+        itemValues.put(KEY_WEIGHT_3, exerciseValues.get(4));
+        itemValues.put(KEY_SET_3, exerciseValues.get(5));
+        itemValues.put(KEY_WEIGHT_4, exerciseValues.get(6));
+        itemValues.put(KEY_SET_4, exerciseValues.get(7));
+        itemValues.put(KEY_WEIGHT_5, exerciseValues.get(8));
+        itemValues.put(KEY_SET_5, exerciseValues.get(9));
+        itemValues.put(KEY_WEIGHT_6, exerciseValues.get(10));
+        itemValues.put(KEY_SET_6, exerciseValues.get(11));
+        itemValues.put(KEY_WEIGHT_7, exerciseValues.get(12));
+        itemValues.put(KEY_SET_7, exerciseValues.get(13));
+        itemValues.put(KEY_WEIGHT_8, exerciseValues.get(14));
+        itemValues.put(KEY_SET_8, exerciseValues.get(15));
+
+        return db.insert(DATABASE_TABLE_EXERCISE_VALUES, null, itemValues);
+    }
+
     public void removeWorkoutItem(String item) {
         String toDelete = KEY_WORKOUT + "=?";
         String[] deleteArguments = new String[]{item};
@@ -124,6 +192,58 @@ public class WorkoutsDatabase {
         return items;
     }
 
+    public ArrayList<Float> getLatestExerciseValuesItem(String exerciseName) {
+        ArrayList<Float> latestExerciseValues = new ArrayList<>();
+        ArrayList<Long> timestamps = new ArrayList<>();
+        long latestTimestamp = 0;
+
+        Cursor cursor = db.query(DATABASE_TABLE_EXERCISE_VALUES, new String[] {
+                KEY_ID, KEY_EXERCISE, KEY_TIME, KEY_WEIGHT_1, KEY_SET_1, KEY_WEIGHT_2, KEY_SET_2,
+                KEY_WEIGHT_3, KEY_SET_3, KEY_WEIGHT_4, KEY_SET_4, KEY_WEIGHT_5, KEY_SET_5,
+                KEY_WEIGHT_6, KEY_SET_6, KEY_WEIGHT_7, KEY_SET_7, KEY_WEIGHT_8, KEY_SET_8}, null,
+                null, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                String exercise = cursor.getString(COLUMN_EXERCISE_NAME_INDEX);
+                if (exercise.equals(exerciseName)) {
+                    long timestamp = cursor.getLong(COLUMN_TIMESTAMP);
+                    timestamps.add(timestamp);
+                }
+            } while (cursor.moveToNext());
+        }
+
+        for (int i = 0; i < timestamps.size(); i++) {
+            if (timestamps.get(i) > latestTimestamp) latestTimestamp = timestamps.get(i);
+        }
+
+        if (cursor.moveToFirst()) {
+            do {
+                long timestamp = cursor.getLong(COLUMN_TIMESTAMP);
+                if (timestamp == latestTimestamp) {
+                    latestExerciseValues.add(cursor.getFloat(COLUMN_WEIGHT_1));
+                    latestExerciseValues.add(cursor.getFloat(COLUMN_SET_1));
+                    latestExerciseValues.add(cursor.getFloat(COLUMN_WEIGHT_2));
+                    latestExerciseValues.add(cursor.getFloat(COLUMN_SET_2));
+                    latestExerciseValues.add(cursor.getFloat(COLUMN_WEIGHT_3));
+                    latestExerciseValues.add(cursor.getFloat(COLUMN_SET_3));
+                    latestExerciseValues.add(cursor.getFloat(COLUMN_WEIGHT_4));
+                    latestExerciseValues.add(cursor.getFloat(COLUMN_SET_4));
+                    latestExerciseValues.add(cursor.getFloat(COLUMN_WEIGHT_5));
+                    latestExerciseValues.add(cursor.getFloat(COLUMN_SET_5));
+                    latestExerciseValues.add(cursor.getFloat(COLUMN_WEIGHT_6));
+                    latestExerciseValues.add(cursor.getFloat(COLUMN_SET_6));
+                    latestExerciseValues.add(cursor.getFloat(COLUMN_WEIGHT_7));
+                    latestExerciseValues.add(cursor.getFloat(COLUMN_SET_7));
+                    latestExerciseValues.add(cursor.getFloat(COLUMN_WEIGHT_8));
+                    latestExerciseValues.add(cursor.getFloat(COLUMN_SET_8));
+                    break;
+                }
+            } while (cursor.moveToNext());
+        }
+
+        return latestExerciseValues;
+    }
 
     private class WorkoutDBOpenHelper extends SQLiteOpenHelper {
 
@@ -140,7 +260,14 @@ public class WorkoutsDatabase {
 
         private static final String  DATABASE_CREATE_EXERCISE_VALUES = "create table " +
                 DATABASE_TABLE_EXERCISE_VALUES + " (" + KEY_ID +
-                " integer primary key autoincrement, " + KEY_EXERCISE;
+                " integer primary key autoincrement, " + KEY_EXERCISE +
+                " text not null, " + KEY_TIME + " integer not null, " + KEY_WEIGHT_1 +
+                " float, " + KEY_SET_1 + " integer, " + KEY_WEIGHT_2 + " float, " + KEY_SET_2 +
+                " integer, " + KEY_WEIGHT_3 + " float, " + KEY_SET_3 + " integer, " + KEY_WEIGHT_4 +
+                " float, " + KEY_SET_4 + " integer, " + KEY_WEIGHT_5 + " float, " + KEY_SET_5 +
+                " integer, " + KEY_WEIGHT_6 + " float, " + KEY_SET_6 + " integer, " + KEY_WEIGHT_7 +
+                " float, " + KEY_SET_7 + " integer, " + KEY_WEIGHT_8 + " float, " + KEY_SET_8 +
+                " integer);";
 
         public WorkoutDBOpenHelper(Context c, String dbName, SQLiteDatabase.CursorFactory factory, int version) {
             super(c, dbName, factory, version);
@@ -150,6 +277,7 @@ public class WorkoutsDatabase {
         public void onCreate(SQLiteDatabase db) {
             db.execSQL(DATABASE_CREATE);
             db.execSQL(DATABASE_CREATE_EXERCISES);
+            db.execSQL(DATABASE_CREATE_EXERCISE_VALUES);
         }
 
         @Override
