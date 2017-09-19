@@ -9,6 +9,7 @@
     android:background="@color/colorPrimary"
     tools:context="janbiko.urgaining.WorkoutsActivity">
 
+    <include layout="@layout/toolbar"/>
 
     <ListView
         android:id="@+id/names_list"

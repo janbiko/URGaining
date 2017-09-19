@@ -39,4 +39,6 @@
     <string name="values_hint">0</string>
 
     <string name="add_values_button">Finish</string>
+    <string name="search">Search</string>
+    <string name="user">User</string>
 </resources>
