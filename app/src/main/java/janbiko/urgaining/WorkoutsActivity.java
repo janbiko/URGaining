@@ -61,11 +61,12 @@ public class WorkoutsActivity extends Activity
                 switch(item.getItemId())
                 {
                     case R.id.navigation_progress:
-                        Toast.makeText(WorkoutsActivity.this, "1", Toast.LENGTH_SHORT).show();
+                        Intent iP = new Intent(WorkoutsActivity.this, ProgressActivity.class);
+                        startActivity(iP);
                         break;
                     case R.id.navigation_workout:
-                        Intent i = new Intent(WorkoutsActivity.this, WorkoutsActivity.class);
-                        startActivity(i);
+                        Intent iW = new Intent(WorkoutsActivity.this, WorkoutsActivity.class);
+                        startActivity(iW);
                         break;
                     case R.id.navigation_settings:
                         Toast.makeText(WorkoutsActivity.this, "3", Toast.LENGTH_SHORT).show();

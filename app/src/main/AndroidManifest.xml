@@ -21,6 +21,9 @@
         <activity android:name=".WorkoutsActivity"
             android:screenOrientation="portrait">
         </activity>
+        <activity android:name=".ProgressActivity"
+                  android:screenOrientation="portrait">
+        </activity>
         <activity android:name=".AddWorkoutPopup"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.PopupTheme">

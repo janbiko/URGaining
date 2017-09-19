@@ -2,6 +2,7 @@ package janbiko.urgaining;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -27,11 +28,12 @@ public class MainActivity extends Activity {
                 switch(item.getItemId())
                 {
                     case R.id.navigation_progress:
-                        Toast.makeText(MainActivity.this, "1", Toast.LENGTH_SHORT).show();
+                        Intent iP = new Intent(MainActivity.this, ProgressActivity.class);
+                        startActivity(iP);
                         break;
                     case R.id.navigation_workout:
-                        Intent i = new Intent(MainActivity.this, WorkoutsActivity.class);
-                        startActivity(i);
+                        Intent iW = new Intent(MainActivity.this, WorkoutsActivity.class);
+                        startActivity(iW);
                         break;
                     case R.id.navigation_settings:
                         Toast.makeText(MainActivity.this, "3", Toast.LENGTH_SHORT).show();
