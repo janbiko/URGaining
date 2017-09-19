@@ -57,7 +57,17 @@ public class ExerciseDetails extends Activity{
         getSets();
         initUI();
 
+        //TEST();
     }
+    /*
+    private void TEST() {
+        ArrayList<ArrayList<Float>> test = workoutsDB.getAllExerciseValuesItems(exerciseName);
+        for (int i = 0; i < test.size(); i++) {
+            for (int j = 0; j < test.get(i).size(); j++) {
+                Log.i("Liste "+i+", Wert "+j+":", test.get(i).get(j).toString());
+            }
+        }
+    }*/
 
 
     private void initDatabase() {

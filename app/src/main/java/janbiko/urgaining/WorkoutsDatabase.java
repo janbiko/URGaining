@@ -192,6 +192,44 @@ public class WorkoutsDatabase {
         return items;
     }
 
+    public ArrayList<ArrayList<Float>> getAllExerciseValuesItems(String exerciseName) {
+        ArrayList<ArrayList<Float>> exerciseValues = new ArrayList<>();
+        Cursor cursor = db.query(DATABASE_TABLE_EXERCISE_VALUES, new String[] {
+                KEY_ID, KEY_EXERCISE, KEY_TIME, KEY_WEIGHT_1, KEY_SET_1, KEY_WEIGHT_2, KEY_SET_2,
+                KEY_WEIGHT_3, KEY_SET_3, KEY_WEIGHT_4, KEY_SET_4, KEY_WEIGHT_5, KEY_SET_5,
+                KEY_WEIGHT_6, KEY_SET_6, KEY_WEIGHT_7, KEY_SET_7, KEY_WEIGHT_8, KEY_SET_8}, null,
+                null, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                String exercise = cursor.getString(COLUMN_EXERCISE_NAME_INDEX);
+                if (exercise.equals(exerciseName)) {
+                    ArrayList<Float> tempList = new ArrayList<>();
+                    tempList.add(cursor.getFloat(COLUMN_WEIGHT_1));
+                    tempList.add(cursor.getFloat(COLUMN_SET_1));
+                    tempList.add(cursor.getFloat(COLUMN_WEIGHT_2));
+                    tempList.add(cursor.getFloat(COLUMN_SET_2));
+                    tempList.add(cursor.getFloat(COLUMN_WEIGHT_3));
+                    tempList.add(cursor.getFloat(COLUMN_SET_3));
+                    tempList.add(cursor.getFloat(COLUMN_WEIGHT_4));
+                    tempList.add(cursor.getFloat(COLUMN_SET_4));
+                    tempList.add(cursor.getFloat(COLUMN_WEIGHT_5));
+                    tempList.add(cursor.getFloat(COLUMN_SET_5));
+                    tempList.add(cursor.getFloat(COLUMN_WEIGHT_6));
+                    tempList.add(cursor.getFloat(COLUMN_SET_6));
+                    tempList.add(cursor.getFloat(COLUMN_WEIGHT_7));
+                    tempList.add(cursor.getFloat(COLUMN_SET_7));
+                    tempList.add(cursor.getFloat(COLUMN_WEIGHT_8));
+                    tempList.add(cursor.getFloat(COLUMN_SET_8));
+                    exerciseValues.add(tempList);
+                }
+
+            } while (cursor.moveToNext());
+        }
+
+        return exerciseValues;
+    }
+
     public ArrayList<Float> getLatestExerciseValuesItem(String exerciseName) {
         ArrayList<Float> latestExerciseValues = new ArrayList<>();
         ArrayList<Long> timestamps = new ArrayList<>();
