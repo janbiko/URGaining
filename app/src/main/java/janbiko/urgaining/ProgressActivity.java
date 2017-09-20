@@ -126,4 +126,9 @@ public class ProgressActivity extends AppCompatActivity {
         dataSet.setLineWidth(2.5f);
         dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
     }
+
+    public void goToSettings(MenuItem item) {
+        Intent i = new Intent(ProgressActivity.this, SettingsActivity.class);
+        startActivity(i);
+    }
 }

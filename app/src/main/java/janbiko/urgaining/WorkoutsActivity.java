@@ -147,4 +147,8 @@ public class WorkoutsActivity extends AppCompatActivity
         });
     }
 
+    public void goToSettings(MenuItem item) {
+        Intent i = new Intent(WorkoutsActivity.this, SettingsActivity.class);
+        startActivity(i);
+    }
 }

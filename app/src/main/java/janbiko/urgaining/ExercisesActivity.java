@@ -166,4 +166,9 @@ public class ExercisesActivity extends AppCompatActivity {
     public void getWorkoutName() {
         workoutName = getIntent().getStringExtra("WorkoutName");
     }
+
+    public void goToSettings(MenuItem item) {
+        Intent i = new Intent(ExercisesActivity.this, SettingsActivity.class);
+        startActivity(i);
+    }
 }
