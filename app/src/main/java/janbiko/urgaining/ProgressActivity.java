@@ -50,12 +50,10 @@ public class ProgressActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-        initDatabase();
-        feedGraph();
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        initDatabase();
+        feedGraph();
     }
 
     @Override
