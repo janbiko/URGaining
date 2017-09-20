@@ -3,8 +3,11 @@ package janbiko.urgaining;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -36,6 +39,30 @@ public class ExercisesActivity extends Activity {
 
         getWorkoutName();
         //Toast.makeText(this, workoutName, Toast.LENGTH_LONG).show();
+
+
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch(item.getItemId())
+                {
+                    case R.id.navigation_progress:
+                        Intent iP = new Intent(ExercisesActivity.this, ProgressActivity.class);
+                        startActivity(iP);
+                        break;
+                    case R.id.navigation_workout:
+                        Intent iW = new Intent(ExercisesActivity.this, WorkoutsActivity.class);
+                        startActivity(iW);
+                        break;
+                    case R.id.navigation_settings:
+                        Toast.makeText(ExercisesActivity.this, "3", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+                return true;
+            }
+        });
+
 
         initDatabase();
         initUI();

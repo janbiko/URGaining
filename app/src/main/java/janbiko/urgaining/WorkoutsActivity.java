@@ -65,8 +65,7 @@ public class WorkoutsActivity extends Activity
                         startActivity(iP);
                         break;
                     case R.id.navigation_workout:
-                        Intent iW = new Intent(WorkoutsActivity.this, WorkoutsActivity.class);
-                        startActivity(iW);
+                        Toast.makeText(WorkoutsActivity.this, "2", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.navigation_settings:
                         Toast.makeText(WorkoutsActivity.this, "3", Toast.LENGTH_SHORT).show();
