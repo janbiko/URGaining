@@ -68,10 +68,12 @@ public class WorkoutsActivity extends AppCompatActivity
                         startActivity(iP);
                         break;
                     case R.id.navigation_workout:
-                        Toast.makeText(WorkoutsActivity.this, "2", Toast.LENGTH_SHORT).show();
+                        Intent iW = new Intent(WorkoutsActivity.this, WorkoutsActivity.class);
+                        startActivity(iW);
                         break;
                     case R.id.navigation_settings:
-                        Toast.makeText(WorkoutsActivity.this, "3", Toast.LENGTH_SHORT).show();
+                        Intent iS = new Intent(WorkoutsActivity.this, SettingsActivity.class);
+                        startActivity(iS);
                         break;
                 }
                 return true;
@@ -80,12 +82,6 @@ public class WorkoutsActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
-        return true;
     }
 
     private void initListViews() {

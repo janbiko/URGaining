@@ -77,7 +77,8 @@ public class ExercisesActivity extends AppCompatActivity {
                         startActivity(iW);
                         break;
                     case R.id.navigation_settings:
-                        Toast.makeText(ExercisesActivity.this, "3", Toast.LENGTH_SHORT).show();
+                        Intent iS = new Intent(ExercisesActivity.this, SettingsActivity.class);
+                        startActivity(iS);
                         break;
                 }
                 return true;
@@ -91,12 +92,6 @@ public class ExercisesActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
-        return true;
     }
 
     @Override

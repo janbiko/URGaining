@@ -4,31 +4,33 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary">
 
-
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="25dp"
-        android:id="@+id/linearLayout2">
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical">
+        <include layout="@layout/toolbar"/>
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:id="@+id/settings_text_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
                 android:text="@string/deload"/>
 
             <Spinner
                 android:id="@+id/deload_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_alignParentEnd="true"/>
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -40,14 +42,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
+                android:layout_marginStart="10dp"
                 android:text="@string/notifications"/>
 
             <Switch
                 android:id="@+id/notification_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_alignParentEnd="true"/>
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -59,18 +62,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
+                android:layout_marginStart="10dp"
                 android:text="@string/dark_theme"/>
 
             <Switch
                 android:id="@+id/dark_theme_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_alignParentEnd="true"/>
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"/>
         </RelativeLayout>
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
 
-
+        <include layout="@layout/bottom_navigation"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"/>
+    </LinearLayout>
 </RelativeLayout>
