@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,7 +22,7 @@ import java.util.ArrayList;
  * Created by Jannik on 13.09.2017.
  */
 
-public class WorkoutsActivity extends Activity
+public class WorkoutsActivity extends AppCompatActivity
 {
 
     private FloatingActionButton addRoutineButton;
@@ -74,6 +77,16 @@ public class WorkoutsActivity extends Activity
                 return true;
             }
         });
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return true;
     }
 
     private void initListViews() {

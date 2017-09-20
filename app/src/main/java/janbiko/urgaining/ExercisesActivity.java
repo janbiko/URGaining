@@ -7,6 +7,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,7 +24,7 @@ import java.util.ArrayList;
  * Created by Jannik on 15.09.2017.
  */
 
-public class ExercisesActivity extends Activity {
+public class ExercisesActivity extends AppCompatActivity {
 
     private String workoutName;
     private FloatingActionButton addExerciseButton;
@@ -40,6 +43,24 @@ public class ExercisesActivity extends Activity {
         getWorkoutName();
         //Toast.makeText(this, workoutName, Toast.LENGTH_LONG).show();
 
+        initDatabase();
+        initUI();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshArrayList();
+    }
+
+    private void initDatabase() {
+        workoutsDB = new WorkoutsDatabase(this);
+        workoutsDB.open();
+    }
+
+    private void initUI() {
+        initButtons();
+        initListViews();
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -63,25 +84,15 @@ public class ExercisesActivity extends Activity {
             }
         });
 
-
-        initDatabase();
-        initUI();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(workoutName);
+        setSupportActionBar(toolbar);
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        refreshArrayList();
-    }
-
-    private void initDatabase() {
-        workoutsDB = new WorkoutsDatabase(this);
-        workoutsDB.open();
-    }
-
-    private void initUI() {
-        initButtons();
-        initListViews();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return true;
     }
 
     private void initListViews() {
