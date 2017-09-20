@@ -1,7 +1,9 @@
 package janbiko.urgaining;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.solver.SolverVariable;
@@ -31,11 +33,13 @@ import java.util.Set;
 public class ExerciseDetails extends Activity{
 
     private int exerciseValuesSize = 16;
+    private float deloadValue;
 
     private String exerciseName;
     private int sets;
     private TextView exercise;
     private Button addValuesButton;
+    private Button deloadButton;
     private LinearLayout exerciseDetails;
     private WorkoutsDatabase workoutsDB;
 
@@ -55,20 +59,15 @@ public class ExerciseDetails extends Activity{
         getExerciseName();
         initDatabase();
         getSets();
+        getDeloadValue();
         initUI();
 
-        //TEST();
     }
-    /*
-    private void TEST() {
-        ArrayList<ArrayList<Float>> test = workoutsDB.getAllExerciseValuesItems(exerciseName);
-        for (int i = 0; i < test.size(); i++) {
-            for (int j = 0; j < test.get(i).size(); j++) {
-                Log.i("Liste "+i+", Wert "+j+":", test.get(i).get(j).toString());
-            }
-        }
-    }*/
 
+    private void getDeloadValue() {
+        SettingsActivity settings = new SettingsActivity();
+        deloadValue = settings.getDeloadValue(this);
+    }
 
     private void initDatabase() {
         workoutsDB = new WorkoutsDatabase(this);
@@ -147,6 +146,24 @@ public class ExerciseDetails extends Activity{
                 addValuesToDatabase();
             }
         });
+
+        deloadButton = (Button) findViewById(R.id.deload_button);
+        deloadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setDeloadValues();
+            }
+        });
+    }
+
+    private void setDeloadValues() {
+        TextView textView = (TextView) kg2.getChildAt(1);
+        float newValue = Math.round(Float.parseFloat(textView.getText().toString()) * deloadValue);
+
+        for (int i = 1; i < kg1.getChildCount(); i++) {
+            EditText editText = (EditText) kg1.getChildAt(i);
+            editText.setText("" + newValue);
+        }
     }
 
     private void addValuesToDatabase(){

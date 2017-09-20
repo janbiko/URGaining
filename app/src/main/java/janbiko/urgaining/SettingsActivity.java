@@ -73,7 +73,7 @@ public class SettingsActivity extends AppCompatActivity {
         editor.apply();
     }
 
-    static public float getDeloadValue(Context context) {
+    public float getDeloadValue(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         return prefs.getFloat(DELOAD_KEY, 0.8f);
     }
