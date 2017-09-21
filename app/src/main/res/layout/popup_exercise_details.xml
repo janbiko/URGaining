@@ -23,7 +23,7 @@
             app:layout_marginTopPercent="5%"
             android:background="@color/colorPrimary"
             app:layout_marginRightPercent="5%"
-            android:layout_toLeftOf="@id/add_values_button"
+            android:layout_toLeftOf="@+id/add_values_button"
             android:text="@string/deload_button"/>
 
         <Button

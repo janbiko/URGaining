@@ -34,7 +34,7 @@
         android:background="@color/colorPrimary"
         android:textSize="12sp"
         android:text="@string/create_button"
-        app:layout_marginTopPercent="30%"
+        app:layout_marginTopPercent="40%"
         android:layout_centerHorizontal="true"
         />
 
