@@ -37,10 +37,6 @@ public class ExerciseDetails extends Activity{
 
     private String exerciseName;
     private int sets;
-    private TextView exercise;
-    private Button addValuesButton;
-    private Button deloadButton;
-    private LinearLayout exerciseDetails;
     private WorkoutsDatabase workoutsDB;
 
     private LinearLayout setCounter1;
@@ -49,7 +45,6 @@ public class ExerciseDetails extends Activity{
     private LinearLayout kg2;
     private LinearLayout reps2;
 
-    //private HashMap<String, Integer> idsMap = new HashMap<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,6 +60,8 @@ public class ExerciseDetails extends Activity{
     }
 
     private void getDeloadValue() {
+        // gets deload value from settings
+
         SettingsActivity settings = new SettingsActivity();
         deloadValue = settings.getDeloadValue(this);
     }
@@ -75,10 +72,7 @@ public class ExerciseDetails extends Activity{
     }
 
     private void initUI() {
-        //exerciseDetails = (LinearLayout) findViewById(R.id.exercise_details);
         initTextViews();
-        //createEditTextsAndTextViews();
-        //createStoredValuesTextViews();
         initButtons();
         deleteUnusedViews();
         fillInLatestExerciseValues();
@@ -86,6 +80,9 @@ public class ExerciseDetails extends Activity{
     }
 
     private void setFocusChangedListeners() {
+        // if user puts in a weight value in the first, second, ... EditText the value is
+        // automatically transferred to all EditTexts after it
+
         for (int i = 1; i < kg1.getChildCount(); i++) {
             final EditText editText = (EditText) kg1.getChildAt(i);
             final int x = i;
@@ -104,6 +101,9 @@ public class ExerciseDetails extends Activity{
     }
 
     private void fillInLatestExerciseValues() {
+        // gets the latest exercise values from the database and puts them in the corresponding
+        // TextViews
+
         ArrayList<Float> latestValues = workoutsDB.getLatestExerciseValuesItem(exerciseName);
         if (latestValues.size() == exerciseValuesSize) {
             int j = 0;
@@ -121,13 +121,15 @@ public class ExerciseDetails extends Activity{
     }
 
     private void deleteUnusedViews() {
+        // deletes all Views unused views, if the exercise has less than the maximum amount of sets
+
         setCounter1 = (LinearLayout) findViewById(R.id.set_counter_1);
         LinearLayout setCounter2 = (LinearLayout) findViewById(R.id.set_counter_2);
         kg1 = (LinearLayout) findViewById(R.id.kg1);
         kg2 = (LinearLayout) findViewById(R.id.kg2);
         reps1 = (LinearLayout) findViewById(R.id.reps1);
         reps2 = (LinearLayout) findViewById(R.id.reps2);
-        //int i = setCounter1.getChildCount() - 1;
+
         for (int i = setCounter1.getChildCount() - 1; i > sets; i--) {
             setCounter1.removeViewAt(i);
             setCounter2.removeViewAt(i);
@@ -139,7 +141,7 @@ public class ExerciseDetails extends Activity{
     }
 
     private void initButtons() {
-        addValuesButton = (Button) findViewById(R.id.add_values_button);
+        Button addValuesButton = (Button) findViewById(R.id.add_values_button);
         addValuesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -147,7 +149,7 @@ public class ExerciseDetails extends Activity{
             }
         });
 
-        deloadButton = (Button) findViewById(R.id.deload_button);
+        Button deloadButton = (Button) findViewById(R.id.deload_button);
         deloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -157,6 +159,9 @@ public class ExerciseDetails extends Activity{
     }
 
     private void setDeloadValues() {
+        // calculates new weight based on the last used weight and the set deload value and puts
+        // it in all weight EditTexts
+
         TextView textView = (TextView) kg2.getChildAt(1);
         float newValue = Math.round(Float.parseFloat(textView.getText().toString()) * deloadValue);
 
@@ -167,32 +172,35 @@ public class ExerciseDetails extends Activity{
     }
 
     private void addValuesToDatabase(){
+        // saves exercise values to the database
+
         ArrayList<Float> exerciseValues = getExerciseValues();
         long timeStamp = System.currentTimeMillis() / 100;
+
+        // checks if user put in a value for every set
         if (exerciseValues.size() != sets * 2) {
             Toast.makeText(getApplicationContext(), "Please enter valid numbers.",
                     Toast.LENGTH_SHORT).show();
-        } else if (exerciseValues.size() == sets * 2 && exerciseValues.size() <= exerciseValuesSize) {
+        } else if (exerciseValues.size() == sets * 2 && exerciseValues.size() <=
+                exerciseValuesSize) {
+
+            // fills in default for unused sets, if the exercise consists of less than the
+            // maximum amount of sets
             while (exerciseValues.size() < exerciseValuesSize) {
                 exerciseValues.add(-1f);
             }
+
             Toast.makeText(getApplicationContext(), "Added successfully.", Toast.LENGTH_SHORT).show();
             workoutsDB.insertExerciseValuesItem(exerciseName, exerciseValues, timeStamp);
             finish();
         }
-
-        ArrayList<Float> test = workoutsDB.getLatestExerciseValuesItem(exerciseName);
-        for (int i = 0; i < test.size(); i++) {
-            Log.i("Wert " + i + ":", test.get(i).toString());
-        }
-
-        /* for Testing
-        for (int i = 0; i < exerciseValues.size(); i++) {
-            Log.i("Wert " + i +":", exerciseValues.get(i).toString());
-        } */
     }
 
     private ArrayList<Float> getExerciseValues() {
+        // gets the exercise values from EditTexts and saves them in an ArrayList, then returns
+        // the ArrayList
+        // {weight1, reps1, weight2, reps2, ...}
+
         ArrayList<Float> values = new ArrayList<>();
         EditText editText;
         float value;
@@ -217,26 +225,31 @@ public class ExerciseDetails extends Activity{
     }
 
     private void initTextViews() {
-        exercise = (TextView) findViewById(R.id.name_exercise);
+        TextView exercise = (TextView) findViewById(R.id.name_exercise);
         exercise.setText(exerciseName);
     }
 
     private void getExerciseName() {
+        // gets the exercise name from intent extra
+
         exerciseName = getIntent().getStringExtra("ExerciseName");
     }
 
     private void getSets() {
+        // gets the amount of sets for the current exercise from the database
+
         for (int i = 0; i < workoutsDB.getAllExerciseItems().size(); i++) {
             if (workoutsDB.getAllExerciseItems().get(i).getName().equals(exerciseName)) {
                 sets = workoutsDB.getAllExerciseItems().get(i).getSets();
                 break;
             }
         }
-        //Toast.makeText(this, "" + sets, Toast.LENGTH_SHORT).show();
     }
 
     private void setPopupWindowSize() {
-        // getting screen size of used device and setting popup window size in relation to given size
+        // getting screen size of used device and setting popup window size in relation to given
+        // size
+
         float popupWindowWidth = 1f;
         float popupWindowHeight = 0.79f;
 

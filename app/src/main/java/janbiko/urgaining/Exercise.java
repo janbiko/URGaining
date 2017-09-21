@@ -1,12 +1,12 @@
 package janbiko.urgaining;
 
-import java.util.ArrayList;
 
 /**
  * Created by Jannik on 15.09.2017.
  */
 
 public class Exercise {
+    // class to store all crucial values needed for an exercise
 
     private String name;
     private int sets;
