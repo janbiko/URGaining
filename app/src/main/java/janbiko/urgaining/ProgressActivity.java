@@ -65,6 +65,7 @@ public class ProgressActivity extends AppCompatActivity {
 
     private void feedGraph(){
         List<Entry> entriesLastEx = new ArrayList<>();
+        List<Entry> entriesPrevEx = new ArrayList<>();
         if(workoutsDB.getAllExerciseValuesItems("Situps") != null){
             ArrayList<ArrayList<Float>> exercises = workoutsDB.getAllExerciseValuesItems("Situps");
 
@@ -72,9 +73,7 @@ public class ProgressActivity extends AppCompatActivity {
                 ArrayList<Float> lastExercise = exercises.get(exercises.size() - 1);
                 ArrayList<Float> previousExercise;
 
-                if(exercises.size() > 1)
-                    previousExercise = exercises.get(exercises.size() - 2);
-
+                //1st graph - for last exercise
                 int oneRM;
                 int graphIndex = 0;
                 if(lastExercise.size() >= 2){
@@ -88,16 +87,40 @@ public class ProgressActivity extends AppCompatActivity {
                         i++;
                     }
                 }
+
+                //2nd graph - for previous exercise
+                if(exercises.size() > 1){
+                    previousExercise = exercises.get(exercises.size() - 2);
+
+                    graphIndex = 0;
+                    if(previousExercise.size() >= 2){
+                        for(int i=0; i<previousExercise.size(); i++)
+                        {
+                            if(previousExercise.get(i) != -1){
+                                oneRM = Math.round(previousExercise.get(i) * (1 + (previousExercise.get(i+1) / 30)));
+                                graphIndex++;
+                                entriesPrevEx.add(new Entry(graphIndex, oneRM));
+                            }
+                            i++;
+                        }
+                    }
+                }
             }
         }
-        
+
         LineChart lineChart = (LineChart) findViewById(R.id.progress_chart);
-        LineDataSet dataSet = new LineDataSet(entriesLastEx, "1RM Value");
-        LineData lineData = new LineData(dataSet);
+        LineDataSet dataSetLast = new LineDataSet(entriesLastEx, "1RM - currently");
+        LineDataSet dataSetPrev = new LineDataSet(entriesPrevEx, "1RM - previously");
+
+        LineData lineData = new LineData();
+        lineData.addDataSet(dataSetLast);
+        lineData.addDataSet(dataSetPrev);
         lineChart.setData(lineData);
 
         setGraphAxisStyle(lineChart, entriesLastEx.size());
-        setDataSetStyle(dataSet);
+        setDataSetLastStyle(dataSetLast);
+        setDataSetPrevStyle(dataSetPrev);
+
         lineChart.invalidate();     //refresh chart
     }
 
@@ -124,12 +147,22 @@ public class ProgressActivity extends AppCompatActivity {
         lineChart.getDescription().setEnabled(false);
     }
 
-    private void setDataSetStyle(LineDataSet dataSet){
+    private void setDataSetLastStyle(LineDataSet dataSet){
         dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
         dataSet.setValueTextSize(10f);
         dataSet.setColor(Color.GREEN);
         dataSet.setCircleRadius(5f);
         dataSet.setCircleColor(Color.GREEN);
+        dataSet.setLineWidth(2.5f);
+        dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+    }
+
+    private void setDataSetPrevStyle(LineDataSet dataSet){
+        dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+        dataSet.setValueTextSize(10f);
+        dataSet.setColor(Color.MAGENTA);
+        dataSet.setCircleRadius(5f);
+        dataSet.setCircleColor(Color.MAGENTA);
         dataSet.setLineWidth(2.5f);
         dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
     }
