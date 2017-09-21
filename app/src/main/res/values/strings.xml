@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">URGaining</string>
+    <string name="facebook_app_id">116526152373574</string>
+    <string name="fb_login_protocol_scheme">fb116526152373574</string>
 
     <string name="workout_plans">Workouts</string>
     <string name="workout">Workout</string>
