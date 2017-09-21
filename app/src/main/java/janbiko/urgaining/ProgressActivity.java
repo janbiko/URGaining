@@ -64,32 +64,33 @@ public class ProgressActivity extends AppCompatActivity {
     }
 
     private void feedGraph(){
-
-        ArrayList<ArrayList<Float>> exercises = workoutsDB.getAllExerciseValuesItems("Situps");
         List<Entry> entriesLastEx = new ArrayList<>();
-        if(exercises.size() > 0){
-            ArrayList<Float> lastExercise = exercises.get(exercises.size() - 1);
-            ArrayList<Float> previousExercise;
+        if(workoutsDB.getAllExerciseValuesItems("Situps") != null){
+            ArrayList<ArrayList<Float>> exercises = workoutsDB.getAllExerciseValuesItems("Situps");
 
-            if(exercises.size() > 1)
-                previousExercise = exercises.get(exercises.size() - 2);
+            if(exercises.size() > 0){
+                ArrayList<Float> lastExercise = exercises.get(exercises.size() - 1);
+                ArrayList<Float> previousExercise;
 
-            int oneRM;
-            int graphIndex = 0;
-            if(lastExercise.size() >= 2){
-                for(int i=0; i<lastExercise.size(); i++)
-                {
-                    if(lastExercise.get(i) != -1){
-                        oneRM = Math.round(lastExercise.get(i) * (1 + (lastExercise.get(i+1) / 30)));            //using 1RM Epley formula
-                        graphIndex++;
-                        entriesLastEx.add(new Entry(graphIndex, oneRM));
+                if(exercises.size() > 1)
+                    previousExercise = exercises.get(exercises.size() - 2);
+
+                int oneRM;
+                int graphIndex = 0;
+                if(lastExercise.size() >= 2){
+                    for(int i=0; i<lastExercise.size(); i++)
+                    {
+                        if(lastExercise.get(i) != -1){
+                            oneRM = Math.round(lastExercise.get(i) * (1 + (lastExercise.get(i+1) / 30)));            //using 1RM Epley formula
+                            graphIndex++;
+                            entriesLastEx.add(new Entry(graphIndex, oneRM));
+                        }
+                        i++;
                     }
-                    i++;
                 }
             }
         }
-
-
+        
         LineChart lineChart = (LineChart) findViewById(R.id.progress_chart);
         LineDataSet dataSet = new LineDataSet(entriesLastEx, "1RM Value");
         LineData lineData = new LineData(dataSet);
