@@ -1,38 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<android.support.percent.PercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent"
-    android:paddingEnd="25dp"
-    android:paddingStart="5dp">
+    android:background="@color/colorSecondary"
+    >
 
     <TextView
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/exercise_name"
         android:textSize="12sp"
-        android:ellipsize="end"/>
+        android:ellipsize="end"
+        app:layout_marginTopPercent="10%"
+        app:layout_marginLeftPercent="10%"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/exercise_name"
         android:textSize="12sp"
-        android:layout_marginTop="10dp"
-        android:hint="@string/workout_hint"/>
+        app:layout_marginTopPercent="15%"
+        android:hint="@string/workout_hint"
+        app:layout_marginLeftPercent="10%"
+        app:layout_marginRightPercent="10%"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="12sp"
-        android:layout_marginTop="50dp"
-        android:text="@string/set_count"/>
+        app:layout_marginTopPercent="10%"
+        android:layout_below="@id/exercise_name"
+        android:text="@string/set_count"
+        app:layout_marginLeftPercent="10%"/>
 
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/set_count_spinner"
-        android:layout_marginTop="70dp"/>
+        app:layout_marginTopPercent="15%"
+        android:layout_below="@id/exercise_name"
+        app:layout_marginLeftPercent="10%"
+        />
 
     <Button
         android:id="@+id/create_exercise_button"
@@ -40,7 +51,10 @@
         android:layout_height="wrap_content"
         android:text="@string/create_button"
         android:background="@color/colorPrimary"
-        android:layout_marginTop="50dp"
-        android:layout_alignParentEnd="true"/>
+        app:layout_marginTopPercent="10%"
+        android:layout_below="@id/exercise_name"
+        android:layout_alignParentRight="true"
+        app:layout_marginRightPercent="10%"
+        />
 
-</RelativeLayout>
+</android.support.percent.PercentRelativeLayout>
