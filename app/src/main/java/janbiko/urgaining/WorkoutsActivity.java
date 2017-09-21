@@ -1,6 +1,5 @@
 package janbiko.urgaining;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,13 +9,11 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -31,10 +28,8 @@ public class WorkoutsActivity extends AppCompatActivity
     private static final String ALERT_POSITIVE_BUTTON = "Yes";
     private static final String ALERT_NEGATIVE_BUTTON = "No";
 
-    private FloatingActionButton addRoutineButton;
     private WorkoutsDatabase workoutsDB;
 
-    private ListView workoutNamesList;
     private ArrayList<String> listItems = new ArrayList<>();
     private ArrayAdapter<String> listAdapter;
 
@@ -56,7 +51,7 @@ public class WorkoutsActivity extends AppCompatActivity
 
     private void initDatabase() {
         workoutsDB = new WorkoutsDatabase(this);
-        workoutsDB.open(/*"workouts"*/);
+        workoutsDB.open();
     }
 
     private void initUI() {
@@ -91,12 +86,15 @@ public class WorkoutsActivity extends AppCompatActivity
     }
 
     private void initListViews() {
-        workoutNamesList = (ListView) findViewById(R.id.names_list);
+        // fills the ListView with the workout names and sets Listeners
+
+        ListView workoutNamesList = (ListView) findViewById(R.id.names_list);
         workoutNamesList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            int position, long id) {
-                // TODO: alle zugehörigen exercise items aus der Datenbank löschen
+                // creates an alert dialog onLongClick
+
                 createAlertDialog(position);
                 return true;
             }
@@ -104,6 +102,8 @@ public class WorkoutsActivity extends AppCompatActivity
         workoutNamesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                // launch "ExerciseActivity" workout's name as extra
+
                 Intent i = new Intent(WorkoutsActivity.this, ExercisesActivity.class);
                 i.putExtra("WorkoutName", listItems.get(position));
                 startActivity(i);
@@ -118,6 +118,8 @@ public class WorkoutsActivity extends AppCompatActivity
     }
 
     private void createAlertDialog(final int position) {
+        // creates an alert dialog to ask the user, if he wants to delete the selected workout
+
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
         alertBuilder.setMessage(ALERT_MESSAGE);
         alertBuilder.setCancelable(false);
@@ -138,6 +140,8 @@ public class WorkoutsActivity extends AppCompatActivity
     }
 
     private void removeWorkoutAtPosition(int position) {
+        // deletes the delivered workout from the database and its corresponding exercises
+
         if (listItems.get(position) != null) {
             removeExercises(listItems.get(position));
             workoutsDB.removeWorkoutItem(listItems.get(position));
@@ -146,6 +150,9 @@ public class WorkoutsActivity extends AppCompatActivity
     }
 
     private void removeExercises(String workoutName) {
+        // gets all exercises associated with the selected workout and deletes them and its values
+        // from the database
+
         ArrayList<String> exerciseNames = new ArrayList<>();
         for (int i = 0; i < workoutsDB.getAllExerciseItems().size(); i++) {
             if (workoutsDB.getAllExerciseItems().get(i).getWorkoutName().equals(workoutName)) {
@@ -157,7 +164,6 @@ public class WorkoutsActivity extends AppCompatActivity
             workoutsDB.removeExerciseValues(exerciseNames.get(i));
             workoutsDB.removeExerciseItem(exerciseNames.get(i));
         }
-
     }
 
     private void refreshArrayList(){
@@ -168,15 +174,19 @@ public class WorkoutsActivity extends AppCompatActivity
     }
 
     private void fillListView() {
+        // gets all workout names from the database and adds them to the ListView
+
         listItems.addAll(workoutsDB.getAllWorkoutItems());
         listAdapter.notifyDataSetChanged();
     }
 
     private void initButtons() {
-        addRoutineButton = (FloatingActionButton) findViewById(R.id.add_button);
+        FloatingActionButton addRoutineButton = (FloatingActionButton) findViewById(R.id.add_button);
         addRoutineButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // launching "AddWorkoutPopup" activity
+
                 Intent i = new Intent(WorkoutsActivity.this, AddWorkoutPopup.class);
                 startActivity(i);
 
@@ -184,8 +194,4 @@ public class WorkoutsActivity extends AppCompatActivity
         });
     }
 
-    public void goToSettings(MenuItem item) {
-        Intent i = new Intent(WorkoutsActivity.this, SettingsActivity.class);
-        startActivity(i);
-    }
 }

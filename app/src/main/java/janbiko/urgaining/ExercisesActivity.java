@@ -33,9 +33,7 @@ public class ExercisesActivity extends AppCompatActivity {
     private static final String ALERT_NEGATIVE_BUTTON = "No";
 
     private String workoutName;
-    private FloatingActionButton addExerciseButton;
 
-    private ListView exerciseNamesList;
     private ArrayList<String> listItems = new ArrayList<>();
     private ArrayAdapter<String> listAdapter;
 
@@ -47,7 +45,6 @@ public class ExercisesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_workouts);
 
         getWorkoutName();
-        //Toast.makeText(this, workoutName, Toast.LENGTH_LONG).show();
 
         initDatabase();
         initUI();
@@ -107,10 +104,14 @@ public class ExercisesActivity extends AppCompatActivity {
     }
 
     private void initListViews() {
-        exerciseNamesList = (ListView) findViewById(R.id.names_list);
+        // fills the ListView with the corresponding exercise names and sets Listeners
+
+        ListView exerciseNamesList = (ListView) findViewById(R.id.names_list);
         exerciseNamesList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
+                // creates an alert dialog onLongClick
+
                 createAlertDialog(position);
                 return true;
             }
@@ -119,6 +120,8 @@ public class ExercisesActivity extends AppCompatActivity {
         exerciseNamesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                // launch "ExerciseDetails" activity with the exercise's name as extra
+
                 Intent i = new Intent(ExercisesActivity.this, ExerciseDetails.class);
                 i.putExtra("ExerciseName", listItems.get(position));
                 startActivity(i);
@@ -132,6 +135,8 @@ public class ExercisesActivity extends AppCompatActivity {
     }
 
     private void createAlertDialog(final int position) {
+        // creates an alert dialog to ask the user, if he wants to delete the selected exercise
+
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
         alertBuilder.setMessage(ALERT_MESSAGE);
         alertBuilder.setCancelable(false);
@@ -152,6 +157,8 @@ public class ExercisesActivity extends AppCompatActivity {
     }
 
     private void removeExerciseAtPosition(int position) {
+        // deletes the delivered exercise and its values from the database
+
         if (listItems.get(position) != null) {
             workoutsDB.removeExerciseItem(listItems.get(position));
             workoutsDB.removeExerciseValues(listItems.get(position));
@@ -172,6 +179,9 @@ public class ExercisesActivity extends AppCompatActivity {
     }
 
     private void fillListView() {
+        // gets all exercise names from current workout from the database and adds them to the
+        // ListView
+
         ArrayList<String> exerciseNames = new ArrayList<>();
         for (int i = 0; i < workoutsDB.getAllExerciseItems().size(); i++) {
             if (workoutsDB.getAllExerciseItems().get(i).getWorkoutName().equals(workoutName)) {
@@ -183,10 +193,12 @@ public class ExercisesActivity extends AppCompatActivity {
     }
 
     private void initButtons() {
-        addExerciseButton = (FloatingActionButton) findViewById(R.id.add_button);
+        FloatingActionButton addExerciseButton = (FloatingActionButton) findViewById(R.id.add_button);
         addExerciseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // launching "AddExercisePopup" activity with the workout name as extra
+
                 Intent i = new Intent(ExercisesActivity.this, AddExercisePopup.class);
                 i.putExtra("WorkoutName", workoutName);
                 startActivity(i);
@@ -198,8 +210,4 @@ public class ExercisesActivity extends AppCompatActivity {
         workoutName = getIntent().getStringExtra("WorkoutName");
     }
 
-    public void goToSettings(MenuItem item) {
-        Intent i = new Intent(ExercisesActivity.this, SettingsActivity.class);
-        startActivity(i);
-    }
 }
