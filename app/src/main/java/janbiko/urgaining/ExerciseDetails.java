@@ -238,7 +238,7 @@ public class ExerciseDetails extends Activity{
     private void setPopupWindowSize() {
         // getting screen size of used device and setting popup window size in relation to given size
         float popupWindowWidth = 1f;
-        float popupWindowHeight = 0.75f;
+        float popupWindowHeight = 0.79f;
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);

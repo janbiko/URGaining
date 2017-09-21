@@ -1,79 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<android.support.percent.PercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary">
+    android:background="@color/colorSecondary">
+    <include layout="@layout/toolbar"/>
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/setting_deload"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:orientation="vertical">
-        <include layout="@layout/toolbar"/>
+        android:layout_below="@id/toolbar"
+        app:layout_marginTopPercent="10%"
+        app:layout_marginLeftPercent="5%"
+        android:text="@string/deload"/>
+    <Spinner
+        android:id="@+id/deload_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        app:layout_marginTopPercent="10%"
+        android:layout_alignParentRight="true"
+        app:layout_marginRightPercent="10%"
+        />
 
-        <RelativeLayout
-            android:id="@+id/settings_text_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
+    <TextView
+        android:id="@+id/setting_notifications"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/setting_deload"
+        app:layout_marginTopPercent="10%"
+        app:layout_marginLeftPercent="5%"
+        android:text="@string/notifications"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="10dp"
-                android:text="@string/deload"/>
 
-            <Spinner
-                android:id="@+id/deload_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="10dp"/>
-        </RelativeLayout>
+    <Switch
+        android:id="@+id/notification_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/setting_deload"
+        app:layout_marginTopPercent="10%"
+        android:layout_alignParentRight="true"
+        app:layout_marginRightPercent="10%"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/setting_notifications"
+        app:layout_marginTopPercent="10%"
+        app:layout_marginLeftPercent="5%"
+        android:text="@string/dark_theme"/>
+    <Switch
+        android:id="@+id/dark_theme_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/setting_notifications"
+        app:layout_marginTopPercent="10%"
+        android:layout_alignParentRight="true"
+        app:layout_marginRightPercent="10%"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="10dp"
-                android:text="@string/notifications"/>
 
-            <Switch
-                android:id="@+id/notification_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="10dp"/>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="10dp"
-                android:text="@string/dark_theme"/>
-
-            <Switch
-                android:id="@+id/dark_theme_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="10dp"/>
-        </RelativeLayout>
-
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -82,7 +69,7 @@
         android:orientation="horizontal">
 
         <include layout="@layout/bottom_navigation"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
-</RelativeLayout>
+</android.support.percent.PercentRelativeLayout>

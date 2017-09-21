@@ -1,11 +1,13 @@
 package janbiko.urgaining;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -24,6 +26,10 @@ import java.util.ArrayList;
 
 public class WorkoutsActivity extends AppCompatActivity
 {
+
+    private static final String ALERT_MESSAGE = "Do you want to delete this workout?";
+    private static final String ALERT_POSITIVE_BUTTON = "Yes";
+    private static final String ALERT_NEGATIVE_BUTTON = "No";
 
     private FloatingActionButton addRoutineButton;
     private WorkoutsDatabase workoutsDB;
@@ -91,7 +97,7 @@ public class WorkoutsActivity extends AppCompatActivity
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            int position, long id) {
                 // TODO: alle zugehörigen exercise items aus der Datenbank löschen
-                removeWorkoutAtPosition(position);
+                createAlertDialog(position);
                 return true;
             }
         });
@@ -109,6 +115,26 @@ public class WorkoutsActivity extends AppCompatActivity
                 listItems);
         workoutNamesList.setAdapter(listAdapter);
         fillListView();
+    }
+
+    private void createAlertDialog(final int position) {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+        alertBuilder.setMessage(ALERT_MESSAGE);
+        alertBuilder.setCancelable(false);
+        alertBuilder.setPositiveButton(ALERT_POSITIVE_BUTTON, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                removeWorkoutAtPosition(position);
+            }
+        });
+        alertBuilder.setNegativeButton(ALERT_NEGATIVE_BUTTON, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+        AlertDialog alert = alertBuilder.create();
+        alert.show();
     }
 
     private void removeWorkoutAtPosition(int position) {
