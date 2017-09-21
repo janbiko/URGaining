@@ -14,9 +14,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
+
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 
 /**
  * Created by Jannik on 20.09.2017.
@@ -34,13 +44,53 @@ public class SettingsActivity extends AppCompatActivity {
     private Switch notificationSwitch;
     private SharedPreferences prefs;
 
+
+    //Facebook login
+    LoginButton loginButton;
+    CallbackManager callbackManager;
+    TextView textStatus;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+
+
+
+
+        initLogin();
+
 
         initPrefs();
         initUI();
+    }
+
+    private void initLogin() {
+        callbackManager = CallbackManager.Factory.create();
+        loginButton = (LoginButton) findViewById(R.id.login_button);
+        textStatus = (TextView) findViewById(R.id.text_status);
+        LoginManager.getInstance().registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        // App code
+                        textStatus.setText("Success!");
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        // App code
+                        textStatus.setText("Cancelled!");
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        // App code
+                        textStatus.setText("Error!");
+                    }
+                });
+
     }
 
     private void initPrefs() {
