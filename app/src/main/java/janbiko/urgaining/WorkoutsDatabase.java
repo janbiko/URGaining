@@ -15,13 +15,18 @@ import java.util.ArrayList;
  */
 
 public class WorkoutsDatabase {
+
     private static final String DATABASE_NAME = "workouts.db";
     private static final int DATABASE_VERSION = 1;
 
+
+    // tables
     private static final String DATABASE_TABLE_WORKOUTS = "workouts";
     private static final String DATABASE_TABLE_EXERCISES = "exercises";
     private static final String DATABASE_TABLE_EXERCISE_VALUES = "exercisevalues";
 
+
+    // keys
     private static final String KEY_ID = "_id";
     private static final String KEY_WORKOUT = "workout";
     private static final String KEY_EXERCISE = "exercise";
@@ -45,7 +50,6 @@ public class WorkoutsDatabase {
     private static final String KEY_SET_7 = "set7";
     private static final String KEY_WEIGHT_8 = "weight8";
     private static final String KEY_SET_8 = "set8";
-
 
 
     // Columns
@@ -97,12 +101,16 @@ public class WorkoutsDatabase {
     }
 
     public long insertWorkoutItem(String item) {
+        // adds new workout to database
+
         ContentValues itemValues = new ContentValues();
         itemValues.put(KEY_WORKOUT, item);
         return db.insert(DATABASE_TABLE_WORKOUTS, null, itemValues);
     }
 
     public long insertExerciseItem(Exercise item) {
+        // adds new exercise to database, consisting of name, sets and corresponding workout name
+
         ContentValues itemValues = new ContentValues();
         itemValues.put(KEY_EXERCISE, item.getName());
         itemValues.put(KEY_SETS, item.getSets());
@@ -112,6 +120,9 @@ public class WorkoutsDatabase {
 
     public long insertExerciseValuesItem(String exerciseName, ArrayList<Float> exerciseValues,
                                          long timeStamp) {
+        // adds new exercise values to database, consisting of exercise name, repetition and weight
+        // count for each set and a timestamp to order the exercise values
+
         ContentValues itemValues = new ContentValues();
         itemValues.put(KEY_EXERCISE, exerciseName);
         itemValues.put(KEY_TIME, timeStamp);
@@ -136,24 +147,32 @@ public class WorkoutsDatabase {
     }
 
     public void removeWorkoutItem(String item) {
+        // removes workout from database based on delivered string
+
         String toDelete = KEY_WORKOUT + "=?";
         String[] deleteArguments = new String[]{item};
         db.delete(DATABASE_TABLE_WORKOUTS, toDelete, deleteArguments);
     }
 
     public void removeExerciseItem(String item) {
+        // removes exercise from database based on delivered string
+
         String toDelete = KEY_EXERCISE + "=?";
         String[] deleteArguments = new String[]{item};
         db.delete(DATABASE_TABLE_EXERCISES, toDelete, deleteArguments);
     }
 
     public void removeExerciseValues(String exerciseName) {
+        // removes all exercise values from corresponding exercise from database
+
         String toDelete = KEY_EXERCISE + "=?";
         String[] deleteArguments = new String[]{exerciseName};
         db.delete(DATABASE_TABLE_EXERCISE_VALUES, toDelete, deleteArguments);
     }
 
     public ArrayList<String> getAllWorkoutItems() {
+        // returns a list containing all saved workout names
+
         ArrayList<String> items = new ArrayList<>();
         Cursor cursor = db.query(DATABASE_TABLE_WORKOUTS, new String[] {
                 KEY_ID, KEY_WORKOUT}, null, null, null, null, null);
@@ -164,16 +183,19 @@ public class WorkoutsDatabase {
 
                 items.add(workout);
             } while (cursor.moveToNext());
-
         }
 
+        cursor.close();
         return items;
     }
 
     public ArrayList<Exercise> getAllExerciseItems() {
+        // returns a list containing all saved exercise names
+
         ArrayList<Exercise> items = new ArrayList<Exercise>();
         Cursor cursor = db.query(DATABASE_TABLE_EXERCISES, new String[] { KEY_ID, KEY_EXERCISE,
         KEY_SETS, KEY_WORKOUT_NAME}, null, null, null, null, null);
+
         if (cursor.moveToFirst()) {
             do {
                 String exercise = cursor.getString(COLUMN_EXERCISE_INDEX);
@@ -183,10 +205,17 @@ public class WorkoutsDatabase {
                 items.add(new Exercise(exercise, sets, workoutName));
             } while (cursor.moveToNext());
         }
+
+        cursor.close();
         return items;
     }
 
     public ArrayList<ArrayList<Float>> getAllExerciseValuesItems(String exerciseName) {
+        /* returns a list of lists containing all weights and repetition counts from the delivered
+           exercise
+           {{weight1, reps1, weight2, reps2, ...}, {weight1, reps1, ...}, ...}
+         */
+
         ArrayList<ArrayList<Float>> exerciseValues = new ArrayList<>();
         Cursor cursor = db.query(DATABASE_TABLE_EXERCISE_VALUES, new String[] {
                 KEY_ID, KEY_EXERCISE, KEY_TIME, KEY_WEIGHT_1, KEY_SET_1, KEY_WEIGHT_2, KEY_SET_2,
@@ -217,14 +246,16 @@ public class WorkoutsDatabase {
                     tempList.add(cursor.getFloat(COLUMN_SET_8));
                     exerciseValues.add(tempList);
                 }
-
             } while (cursor.moveToNext());
         }
 
+        cursor.close();
         return exerciseValues;
     }
 
     public ArrayList<Float> getLatestExerciseValuesItem(String exerciseName) {
+        // returns a list containing the last saved exercise values
+
         ArrayList<Float> latestExerciseValues = new ArrayList<>();
         ArrayList<Long> timestamps = new ArrayList<>();
         long latestTimestamp = 0;
@@ -317,28 +348,4 @@ public class WorkoutsDatabase {
 
         }
     }
-    /*
-    private class ExerciseDBOpenHelper extends SQLiteOpenHelper {
-
-        private static final String DATABASE_CREATE = "create table " +
-                DATABASE_TABLE_EXERCISES + " (" + KEY_ID +
-                " integer primary key autoincrement, " + KEY_EXERCISE +
-                " text not null, " + KEY_SETS + " not null);";
-
-        public ExerciseDBOpenHelper(Context c, String dbName, SQLiteDatabase.CursorFactory factory, int version) {
-            super(c, dbName, factory, version);
-        }
-
-        @Override
-        public void onCreate(SQLiteDatabase db) {
-            db.execSQL(DATABASE_CREATE);
-        }
-
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-        }
-    }*/
 }
-
-
