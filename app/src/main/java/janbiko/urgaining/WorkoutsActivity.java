@@ -139,9 +139,25 @@ public class WorkoutsActivity extends AppCompatActivity
 
     private void removeWorkoutAtPosition(int position) {
         if (listItems.get(position) != null) {
+            removeExercises(listItems.get(position));
             workoutsDB.removeWorkoutItem(listItems.get(position));
             refreshArrayList();
         }
+    }
+
+    private void removeExercises(String workoutName) {
+        ArrayList<String> exerciseNames = new ArrayList<>();
+        for (int i = 0; i < workoutsDB.getAllExerciseItems().size(); i++) {
+            if (workoutsDB.getAllExerciseItems().get(i).getWorkoutName().equals(workoutName)) {
+                exerciseNames.add(workoutsDB.getAllExerciseItems().get(i).getName());
+            }
+        }
+
+        for (int i = 0; i < exerciseNames.size(); i++) {
+            workoutsDB.removeExerciseValues(exerciseNames.get(i));
+            workoutsDB.removeExerciseItem(exerciseNames.get(i));
+        }
+
     }
 
     private void refreshArrayList(){
