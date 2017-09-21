@@ -10,33 +10,14 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-<<<<<<< HEAD
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-=======
-        android:theme="@style/AppTheme" >
-        <activity android:name=".MainActivity"
-
-            android:screenOrientation = "portrait">
->>>>>>> origin/master
-
         </activity>
-<<<<<<< HEAD
         <activity
             android:name=".WorkoutsActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity
-            android:name=".ProgressActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity
-            android:name=".AddWorkoutPopup"
-=======
-        <activity android:name=".WorkoutsActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity android:name=".ProgressActivity"
@@ -44,25 +25,27 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".AddWorkoutPopup"
->>>>>>> origin/master
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.PopupTheme"></activity>
+            android:theme="@style/AppTheme.PopupTheme">
+        </activity>
         <activity
             android:name=".ExercisesActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait">
+        </activity>
         <activity
             android:name=".AddExercisePopup"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.PopupTheme"></activity>
+            android:theme="@style/AppTheme.PopupTheme">
+        </activity>
         <activity
             android:name=".ExerciseDetails"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.PopupTheme"></activity>
+            android:theme="@style/AppTheme.PopupTheme">
+        </activity>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -87,13 +70,12 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-<<<<<<< HEAD
-        <activity android:name=".LoginActivity" android:screenOrientation="portrait"></activity>
-=======
+        <activity android:name=".LoginActivity"
+            android:screenOrientation="portrait">
+        </activity>
         <activity android:name=".SettingsActivity"
             android:screenOrientation="portrait">
         </activity>
->>>>>>> origin/master
     </application>
 
 </manifest>
