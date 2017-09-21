@@ -18,10 +18,8 @@ import android.widget.Toast;
 
 public class AddExercisePopup extends Activity{
 
-    private Button createExerciseButton;
     private EditText nameInput;
     private Spinner setCountSpinner;
-    private ArrayAdapter<Integer> spinnerAdapter;
 
     private String workoutName;
     private WorkoutsDatabase workoutsDB;
@@ -43,7 +41,7 @@ public class AddExercisePopup extends Activity{
 
     private void initDatabase() {
         workoutsDB = new WorkoutsDatabase(this);
-        workoutsDB.open(/*"exercises"*/);
+        workoutsDB.open();
     }
 
     private void initUI() {
@@ -57,7 +55,7 @@ public class AddExercisePopup extends Activity{
     }
 
     private void initButtons() {
-        createExerciseButton = (Button) findViewById(R.id.create_exercise_button);
+        Button createExerciseButton = (Button) findViewById(R.id.create_exercise_button);
         createExerciseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,9 +66,10 @@ public class AddExercisePopup extends Activity{
     }
 
     private void saveExerciseToDatabase() {
-        //Toast.makeText(getApplicationContext(), nameInput.getText().toString() +
-         //               setCountSpinner.getSelectedItem().toString(),
-         //       Toast.LENGTH_SHORT).show();
+        // creates new Exercise object from "nameInput" and "setCountSpinner" values and saves it
+        // to the database, if the the exercise name is not an empty string and doesn't already
+        // exist
+
         String exerciseName = nameInput.getText().toString();
         int sets = (int) setCountSpinner.getSelectedItem();
         Exercise exercise = new Exercise(exerciseName, sets, workoutName);
@@ -92,6 +91,7 @@ public class AddExercisePopup extends Activity{
 
     private boolean exerciseAlreadyExisting(String name) {
         // checks if exercise name already exists in the database
+
         for (int i = 0; i < workoutsDB.getAllExerciseItems().size(); i++) {
             if (name.equals(workoutsDB.getAllExerciseItems().get(i).getName())) return true;
         }
@@ -99,16 +99,20 @@ public class AddExercisePopup extends Activity{
     }
 
     private void initSpinner() {
+        // initializes setCountSpinner and feeds it with values via an adapter
+
         setCountSpinner = (Spinner) findViewById(R.id.set_count_spinner);
         Integer[] values = new Integer[] {1, 2, 3, 4, 5, 6, 7, 8};
-        spinnerAdapter = new ArrayAdapter<>(AddExercisePopup.this,
+        ArrayAdapter<Integer> spinnerAdapter = new ArrayAdapter<>(AddExercisePopup.this,
                 R.layout.support_simple_spinner_dropdown_item, values);
         spinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         setCountSpinner.setAdapter(spinnerAdapter);
     }
 
     private void setPopupWindowSize() {
-        // getting screen size of used device and setting popup window size in relation to given size
+        // getting screen size of used device and setting popup window size in relation to given
+        // size
+
         float popupWindowWidth = 0.75f;
         float popupWindowHeight = 0.35f;
 

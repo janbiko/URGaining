@@ -14,9 +14,7 @@ import android.widget.Toast;
 
 public class AddWorkoutPopup extends Activity{
 
-    private Button createWorkoutButton;
     private EditText nameInput;
-
     private WorkoutsDatabase workoutsDatabase;
 
     @Override
@@ -32,7 +30,7 @@ public class AddWorkoutPopup extends Activity{
 
     private void initDatabase() {
         workoutsDatabase = new WorkoutsDatabase(this);
-        workoutsDatabase.open(/*"workouts"*/);
+        workoutsDatabase.open();
     }
 
     private void initUI() {
@@ -45,7 +43,7 @@ public class AddWorkoutPopup extends Activity{
     }
 
     private void initButtons() {
-        createWorkoutButton = (Button) findViewById(R.id.create_workout_button);
+        Button createWorkoutButton = (Button) findViewById(R.id.create_workout_button);
         createWorkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,6 +57,7 @@ public class AddWorkoutPopup extends Activity{
     private void saveNameToDatabase() {
         // if the entered workout name is not empty and doesn't already exist in the database, it
         // is stored in the database
+
         String workoutName = nameInput.getText().toString();
         if (workoutName.equals("")) {
             Toast.makeText(getApplicationContext(), "Please enter a valid name.",
@@ -77,6 +76,7 @@ public class AddWorkoutPopup extends Activity{
 
     private boolean workoutAlreadyExisting(String name) {
         // checks if workout name already exists in the database
+
         for (int i = 0; i < workoutsDatabase.getAllWorkoutItems().size(); i++) {
             if (name.equals(workoutsDatabase.getAllWorkoutItems().get(i))) return true;
         }
@@ -84,7 +84,9 @@ public class AddWorkoutPopup extends Activity{
     }
 
     private void setPopupWindowSize() {
-        // getting screen size of used device and setting popup window size in relation to given size
+        // getting screen size of used device and setting popup window size in relation to given
+        // size
+
         float popupWindowWidth = 0.75f;
         float popupWindowHeight = 0.25f;
 
