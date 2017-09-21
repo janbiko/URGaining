@@ -1,66 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<android.support.percent.PercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent">
+    android:background="@color/colorSecondary">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/name_exercise"
         android:textSize="17sp"
-        android:paddingTop="5dp"
-        android:paddingStart="5dp"
-        android:paddingEnd="0dp"
+        app:layout_marginTopPercent="5%"
+        app:layout_marginLeftPercent="5%"
         android:text="@string/exercise_name_placeholder"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/add_values_button"
-        android:layout_marginEnd="5dp"
-        android:layout_marginTop="5dp"
-        android:background="@color/colorPrimary"
-        android:text="@string/add_values_button"
-        android:layout_alignParentEnd="true"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/deload_button"
+            app:layout_marginTopPercent="5%"
+            android:background="@color/colorPrimary"
+            app:layout_marginRightPercent="5%"
+            android:layout_toLeftOf="@+id/add_values_button"
+            android:text="@string/deload_button"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/add_values_button"
+            android:background="@color/colorPrimary"
+            android:layout_alignParentRight="true"
+            app:layout_marginRightPercent="1%"
+            app:layout_marginTopPercent="5%"
+            android:text="@string/add_values_button"/>
+
+
 
     <HorizontalScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:layout_marginStart="5dp">
+        android:layout_below="@id/add_values_button"
+        app:layout_marginTopPercent="3%">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-    
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Current Training:"
                 android:textSize="18sp"/>
-    
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:id="@+id/set_counter_1"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="25dp">
-    
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Set"
                     android:textSize="18sp"/>
-    
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="60dp"
                     android:text="1"
                     android:textSize="18sp"/>
-    
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -103,15 +117,15 @@
                     android:layout_marginStart="60dp"
                     android:text="8"
                     android:textSize="18sp"/>
-    
+
             </LinearLayout>
-    
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/kg1"
                 android:layout_marginTop="18dp">
-    
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -189,15 +203,15 @@
                     android:layout_marginStart="20dp"
                     android:textSize="15sp"
                     android:maxLines="1"/>
-    
+
             </LinearLayout>
-    
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/reps1"
                 android:layout_marginTop="18dp">
-    
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -275,38 +289,38 @@
                     android:layout_marginStart="20dp"
                     android:textSize="15sp"
                     android:maxLines="1"/>
-    
+
             </LinearLayout>
-    
-    
-    
+
+
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
                 android:text="Last Training:"
                 android:textSize="18sp"/>
-    
-    
+
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:id="@+id/set_counter_2"
                 android:layout_marginTop="10dp">
-    
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Set"
                     android:textSize="18sp"/>
-    
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="60dp"
                     android:text="1"
                     android:textSize="18sp"/>
-    
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -349,21 +363,21 @@
                     android:layout_marginStart="60dp"
                     android:text="8"
                     android:textSize="18sp"/>
-    
+
             </LinearLayout>
-    
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/kg2"
                 android:layout_marginTop="18dp">
-    
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Kg"
                     android:textSize="18sp"/>
-    
+
                 <TextView
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
@@ -419,15 +433,15 @@
                     android:layout_marginStart="20dp"
                     android:text="@string/values_hint"
                     android:textAlignment="center"/>
-    
+
             </LinearLayout>
-    
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/reps2"
                 android:layout_marginTop="18dp">
-    
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -489,121 +503,15 @@
                     android:layout_marginStart="20dp"
                     android:text="@string/values_hint"
                     android:textAlignment="center"/>
-    
+
             </LinearLayout>
-        
+
             <Space
                 android:layout_width="wrap_content"
                 android:layout_height="10dp" />
-            
+
         </LinearLayout>
 
     </HorizontalScrollView>
 
-
-
-    <!--
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/exercise_details"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginTop="60dp"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/titles">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/weight"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/values_input"
-            android:layout_marginTop="15dp">
-
-            <EditText
-                android:layout_width="35dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/weight_input"
-                android:textSize="12sp"
-                android:inputType="numberDecimal"
-                android:maxLines="1"
-                android:hint="@string/values_hint"/>
-
-            <EditText
-                android:layout_width="25dp"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:layout_marginLeft="12dp"
-                android:hint="@string/values_hint"/>
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginTop="15dp">
-            
-            <TextView
-                android:layout_width="25dp"
-                android:layout_height="wrap_content"
-                android:text="100"
-                android:layout_marginEnd="14dp"/>
-
-            <TextView
-                android:layout_width="25dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="5"/>
-            <TextView
-                android:layout_width="25dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="35"/>
-            <TextView
-                android:layout_width="25dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="5"/>
-            <TextView
-                android:layout_width="25dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="15"/>
-            <TextView
-                android:layout_width="25dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="25"/>
-            <TextView
-                android:layout_width="25dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="5"/>
-            <TextView
-                android:layout_width="25dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="5"/>
-            <TextView
-                android:layout_width="25dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="5"/>
-            
-        </LinearLayout>
-
-    </LinearLayout>
-    -->
-
-</RelativeLayout>
+</android.support.percent.PercentRelativeLayout>

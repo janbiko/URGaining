@@ -41,6 +41,11 @@
     <string name="values_hint">0</string>
 
     <string name="add_values_button">Finish</string>
+    <string name="deload_button">Deload</string>
     <string name="search">Search</string>
     <string name="user">User</string>
+
+    <string name="deload">Deload Amount</string>
+    <string name="notifications">Notifications</string>
+    <string name="dark_theme">Dark Theme</string>
 </resources>

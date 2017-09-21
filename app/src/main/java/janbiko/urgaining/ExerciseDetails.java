@@ -1,7 +1,9 @@
 package janbiko.urgaining;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.solver.SolverVariable;
@@ -30,18 +32,22 @@ import java.util.Set;
 
 public class ExerciseDetails extends Activity{
 
-    private int pseudoWert = 5;
+    private int exerciseValuesSize = 16;
+    private float deloadValue;
 
     private String exerciseName;
     private int sets;
     private TextView exercise;
     private Button addValuesButton;
+    private Button deloadButton;
     private LinearLayout exerciseDetails;
     private WorkoutsDatabase workoutsDB;
 
     private LinearLayout setCounter1;
     private LinearLayout kg1;
     private LinearLayout reps1;
+    private LinearLayout kg2;
+    private LinearLayout reps2;
 
     //private HashMap<String, Integer> idsMap = new HashMap<>();
 
@@ -53,10 +59,15 @@ public class ExerciseDetails extends Activity{
         getExerciseName();
         initDatabase();
         getSets();
+        getDeloadValue();
         initUI();
 
     }
 
+    private void getDeloadValue() {
+        SettingsActivity settings = new SettingsActivity();
+        deloadValue = settings.getDeloadValue(this);
+    }
 
     private void initDatabase() {
         workoutsDB = new WorkoutsDatabase(this);
@@ -70,15 +81,52 @@ public class ExerciseDetails extends Activity{
         //createStoredValuesTextViews();
         initButtons();
         deleteUnusedViews();
+        fillInLatestExerciseValues();
+        setFocusChangedListeners();
+    }
+
+    private void setFocusChangedListeners() {
+        for (int i = 1; i < kg1.getChildCount(); i++) {
+            final EditText editText = (EditText) kg1.getChildAt(i);
+            final int x = i;
+            editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (!hasFocus) {
+                        for (int j = x +1; j < kg1.getChildCount(); j++) {
+                            EditText sibling = (EditText) kg1.getChildAt(j);
+                            sibling.setText(editText.getText().toString());
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    private void fillInLatestExerciseValues() {
+        ArrayList<Float> latestValues = workoutsDB.getLatestExerciseValuesItem(exerciseName);
+        if (latestValues.size() == exerciseValuesSize) {
+            int j = 0;
+            for (int i = 1; i < kg2.getChildCount(); i++) {
+                TextView kgTextView = (TextView) kg2.getChildAt(i);
+                kgTextView.setText(latestValues.get(j).toString());
+
+                TextView repsTextView = (TextView) reps2.getChildAt(i);
+                int val = Math.round(latestValues.get(j + 1));
+                repsTextView.setText("" + val);
+
+                j += 2;
+            }
+        }
     }
 
     private void deleteUnusedViews() {
         setCounter1 = (LinearLayout) findViewById(R.id.set_counter_1);
         LinearLayout setCounter2 = (LinearLayout) findViewById(R.id.set_counter_2);
         kg1 = (LinearLayout) findViewById(R.id.kg1);
-        LinearLayout kg2 = (LinearLayout) findViewById(R.id.kg2);
+        kg2 = (LinearLayout) findViewById(R.id.kg2);
         reps1 = (LinearLayout) findViewById(R.id.reps1);
-        LinearLayout reps2 = (LinearLayout) findViewById(R.id.reps2);
+        reps2 = (LinearLayout) findViewById(R.id.reps2);
         //int i = setCounter1.getChildCount() - 1;
         for (int i = setCounter1.getChildCount() - 1; i > sets; i--) {
             setCounter1.removeViewAt(i);
@@ -96,9 +144,26 @@ public class ExerciseDetails extends Activity{
             @Override
             public void onClick(View view) {
                 addValuesToDatabase();
-                //finish();
             }
         });
+
+        deloadButton = (Button) findViewById(R.id.deload_button);
+        deloadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setDeloadValues();
+            }
+        });
+    }
+
+    private void setDeloadValues() {
+        TextView textView = (TextView) kg2.getChildAt(1);
+        float newValue = Math.round(Float.parseFloat(textView.getText().toString()) * deloadValue);
+
+        for (int i = 1; i < kg1.getChildCount(); i++) {
+            EditText editText = (EditText) kg1.getChildAt(i);
+            editText.setText("" + newValue);
+        }
     }
 
     private void addValuesToDatabase(){
@@ -107,12 +172,13 @@ public class ExerciseDetails extends Activity{
         if (exerciseValues.size() != sets * 2) {
             Toast.makeText(getApplicationContext(), "Please enter valid numbers.",
                     Toast.LENGTH_SHORT).show();
-        } else if (exerciseValues.size() == sets * 2 && exerciseValues.size() <= 16) {
-            while (exerciseValues.size() < 16) {
+        } else if (exerciseValues.size() == sets * 2 && exerciseValues.size() <= exerciseValuesSize) {
+            while (exerciseValues.size() < exerciseValuesSize) {
                 exerciseValues.add(-1f);
             }
-            Toast.makeText(getApplicationContext(), "Added succesfully.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Added successfully.", Toast.LENGTH_SHORT).show();
             workoutsDB.insertExerciseValuesItem(exerciseName, exerciseValues, timeStamp);
+            finish();
         }
 
         ArrayList<Float> test = workoutsDB.getLatestExerciseValuesItem(exerciseName);
@@ -149,126 +215,6 @@ public class ExerciseDetails extends Activity{
 
         return values;
     }
-    /*
-    private void createStoredValuesTextViews() {
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        int layoutMarginTopPX = 15;
-        int layoutMarginTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                layoutMarginTopPX, getResources().getDisplayMetrics());
-        layoutParams.setMargins(0, layoutMarginTop, 0, 0);
-
-        for (int i = 0; i < pseudoWert; i++) {
-            LinearLayout linearLayout = new LinearLayout(this);
-            TextView weightTextView = createWeightTextView();
-            linearLayout.addView(weightTextView, createWeightLayoutParams());
-            for (int j = 0; j < sets; j++) {
-                TextView repsTextView = createValuesTextView();
-                linearLayout.addView(repsTextView, createRepsLayoutParams());
-            }
-            exerciseDetails.addView(linearLayout, layoutParams);
-        }
-    }
-
-    private LinearLayout.LayoutParams createWeightLayoutParams() {
-        int textViewWidthPX = 25;
-        int textViewWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                textViewWidthPX, getResources().getDisplayMetrics());
-        int textViewMarginEndPX = 14;
-        int textViewMarginEnd = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                textViewMarginEndPX, getResources().getDisplayMetrics());
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                textViewWidth, LinearLayout.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMarginEnd(textViewMarginEnd);
-
-        return layoutParams;
-    }
-
-    private LinearLayout.LayoutParams createRepsLayoutParams() {
-        int textViewWidthPX = 25;
-        int textViewWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                textViewWidthPX, getResources().getDisplayMetrics());
-        int textViewMarginStartPX = 8;
-        int textViewMarginStart= (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                textViewMarginStartPX, getResources().getDisplayMetrics());
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                textViewWidth, LinearLayout.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMarginStart(textViewMarginStart);
-
-        return layoutParams;
-    }
-
-    private TextView createValuesTextView() {
-        TextView textView = new TextView(this);
-        //TODO: remove later
-        textView.setText("5");
-
-        return textView;
-    }
-
-    private TextView createWeightTextView() {
-        TextView textView =  new TextView(this);
-        //TODO: remove later
-        textView.setText("100");
-
-        return textView;
-    }
-
-    private void createEditTextsAndTextViews() {
-        LinearLayout titles = (LinearLayout) findViewById(R.id.titles);
-        LinearLayout valuesInput = (LinearLayout) findViewById(R.id.values_input);
-        int marginLeftTextViewsPX = 5;
-        int layoutWidthEditTextsPX = 23;
-        int marginLeftEditTextsPX = 10;
-        int editTextTextSize = 12;
-
-        LinearLayout.LayoutParams layoutParamsTextViews = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-        // converting from px to dp
-        int marginLeftTextViews = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                marginLeftTextViewsPX, getResources().getDisplayMetrics());
-        layoutParamsTextViews.setMargins(marginLeftTextViews, 0, 0, 0);
-
-        // converting from px to dp
-        int layoutWidthEditTexts = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                layoutWidthEditTextsPX, getResources().getDisplayMetrics());
-        LinearLayout.LayoutParams layoutParamsEditTexts = new LinearLayout.LayoutParams(
-                layoutWidthEditTexts, LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-        // converting from px to dp
-        int marginLeftEditTexts = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                marginLeftEditTextsPX, getResources().getDisplayMetrics());
-        layoutParamsEditTexts.setMargins(marginLeftEditTexts, 0, 0, 0);
-
-        for (int i = 1; i <= sets; i++) {
-            TextView textView = new TextView(this);
-            textView.setText("Set" + i);
-            titles.addView(textView, layoutParamsTextViews);
-
-            EditText editText = new EditText(this);
-            editText.setHint(R.string.values_hint);
-            editText.setRawInputType(InputType.TYPE_CLASS_NUMBER);
-            editText.setTextSize(editTextTextSize);
-            editText.setSingleLine(true);
-
-            editText.setId(assignId(i));
-
-            valuesInput.addView(editText, layoutParamsEditTexts);
-        }
-    }
-
-    private int assignId(int i) {
-        if (i == 1) return R.id.id1;
-        else if (i == 2) return R.id.id2;
-        else if (i == 3) return R.id.id3;
-        else if (i == 4) return R.id.id4;
-        else if (i == 5) return R.id.id5;
-        else if (i == 6) return R.id.id6;
-        else if (i == 7) return R.id.id7;
-        else return R.id.id8;
-    }   */
 
     private void initTextViews() {
         exercise = (TextView) findViewById(R.id.name_exercise);
@@ -291,8 +237,8 @@ public class ExerciseDetails extends Activity{
 
     private void setPopupWindowSize() {
         // getting screen size of used device and setting popup window size in relation to given size
-        float popupWindowWidth = 0.95f;
-        float popupWindowHeight = 0.95f;
+        float popupWindowWidth = 1f;
+        float popupWindowHeight = 0.79f;
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);

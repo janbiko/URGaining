@@ -37,31 +37,23 @@ public class ProgressActivity extends AppCompatActivity {
                 switch(item.getItemId())
                 {
                     case R.id.navigation_progress:
-                        Toast.makeText(ProgressActivity.this, "1", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.navigation_workout:
-                        Intent i = new Intent(ProgressActivity.this, WorkoutsActivity.class);
-                        startActivity(i);
+                        Intent iW = new Intent(ProgressActivity.this, WorkoutsActivity.class);
+                        startActivity(iW);
                         break;
                     case R.id.navigation_settings:
-                        Toast.makeText(ProgressActivity.this, "3", Toast.LENGTH_SHORT).show();
+                        Intent iS = new Intent(ProgressActivity.this, SettingsActivity.class);
+                        startActivity(iS);
                         break;
                 }
                 return true;
             }
         });
-
-        initDatabase();
-        feedGraph();
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
-        return true;
+        initDatabase();
+        feedGraph();
     }
 
     private void initDatabase() {
@@ -125,5 +117,10 @@ public class ProgressActivity extends AppCompatActivity {
         dataSet.setCircleColor(Color.GREEN);
         dataSet.setLineWidth(2.5f);
         dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+    }
+
+    public void goToSettings(MenuItem item) {
+        Intent i = new Intent(ProgressActivity.this, SettingsActivity.class);
+        startActivity(i);
     }
 }

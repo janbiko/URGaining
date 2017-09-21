@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorSecondary">
+    <include layout="@layout/toolbar"/>
+
+    <TextView
+        android:id="@+id/setting_deload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        app:layout_marginTopPercent="10%"
+        app:layout_marginLeftPercent="5%"
+        android:text="@string/deload"/>
+    <Spinner
+        android:id="@+id/deload_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        app:layout_marginTopPercent="10%"
+        android:layout_alignParentRight="true"
+        app:layout_marginRightPercent="10%"
+        />
+
+    <TextView
+        android:id="@+id/setting_notifications"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/setting_deload"
+        app:layout_marginTopPercent="10%"
+        app:layout_marginLeftPercent="5%"
+        android:text="@string/notifications"/>
+
+
+    <Switch
+        android:id="@+id/notification_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/setting_deload"
+        app:layout_marginTopPercent="10%"
+        android:layout_alignParentRight="true"
+        app:layout_marginRightPercent="10%"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/setting_notifications"
+        app:layout_marginTopPercent="10%"
+        app:layout_marginLeftPercent="5%"
+        android:text="@string/dark_theme"/>
+    <Switch
+        android:id="@+id/dark_theme_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/setting_notifications"
+        app:layout_marginTopPercent="10%"
+        android:layout_alignParentRight="true"
+        app:layout_marginRightPercent="10%"/>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <include layout="@layout/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</android.support.percent.PercentRelativeLayout>

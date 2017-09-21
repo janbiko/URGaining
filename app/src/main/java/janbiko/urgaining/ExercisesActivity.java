@@ -1,10 +1,18 @@
 package janbiko.urgaining;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,7 +26,11 @@ import java.util.ArrayList;
  * Created by Jannik on 15.09.2017.
  */
 
-public class ExercisesActivity extends Activity {
+public class ExercisesActivity extends AppCompatActivity {
+
+    private static final String ALERT_MESSAGE = "Do you want to delete this exercise?";
+    private static final String ALERT_POSITIVE_BUTTON = "Yes";
+    private static final String ALERT_NEGATIVE_BUTTON = "No";
 
     private String workoutName;
     private FloatingActionButton addExerciseButton;
@@ -55,6 +67,43 @@ public class ExercisesActivity extends Activity {
     private void initUI() {
         initButtons();
         initListViews();
+
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch(item.getItemId())
+                {
+                    case R.id.navigation_progress:
+                        Intent iP = new Intent(ExercisesActivity.this, ProgressActivity.class);
+                        startActivity(iP);
+                        break;
+                    case R.id.navigation_workout:
+                        Intent iW = new Intent(ExercisesActivity.this, WorkoutsActivity.class);
+                        startActivity(iW);
+                        break;
+                    case R.id.navigation_settings:
+                        Intent iS = new Intent(ExercisesActivity.this, SettingsActivity.class);
+                        startActivity(iS);
+                        break;
+                }
+                return true;
+            }
+        });
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(workoutName);
+        setSupportActionBar(toolbar);
+        if(getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     private void initListViews() {
@@ -62,7 +111,7 @@ public class ExercisesActivity extends Activity {
         exerciseNamesList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
-                removeExerciseAtPosition(position);
+                createAlertDialog(position);
                 return true;
             }
         });
@@ -82,9 +131,30 @@ public class ExercisesActivity extends Activity {
         fillListView();
     }
 
+    private void createAlertDialog(final int position) {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+        alertBuilder.setMessage(ALERT_MESSAGE);
+        alertBuilder.setCancelable(false);
+        alertBuilder.setPositiveButton(ALERT_POSITIVE_BUTTON, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                removeExerciseAtPosition(position);
+            }
+        });
+        alertBuilder.setNegativeButton(ALERT_NEGATIVE_BUTTON, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+        AlertDialog alert = alertBuilder.create();
+        alert.show();
+    }
+
     private void removeExerciseAtPosition(int position) {
         if (listItems.get(position) != null) {
             workoutsDB.removeExerciseItem(listItems.get(position));
+            workoutsDB.removeExerciseValues(listItems.get(position));
             refreshArrayList();
         }
     }
@@ -126,5 +196,10 @@ public class ExercisesActivity extends Activity {
 
     public void getWorkoutName() {
         workoutName = getIntent().getStringExtra("WorkoutName");
+    }
+
+    public void goToSettings(MenuItem item) {
+        Intent i = new Intent(ExercisesActivity.this, SettingsActivity.class);
+        startActivity(i);
     }
 }

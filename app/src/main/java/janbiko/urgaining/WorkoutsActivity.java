@@ -1,11 +1,16 @@
 package janbiko.urgaining;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,8 +24,12 @@ import java.util.ArrayList;
  * Created by Jannik on 13.09.2017.
  */
 
-public class WorkoutsActivity extends Activity
+public class WorkoutsActivity extends AppCompatActivity
 {
+
+    private static final String ALERT_MESSAGE = "Do you want to delete this workout?";
+    private static final String ALERT_POSITIVE_BUTTON = "Yes";
+    private static final String ALERT_NEGATIVE_BUTTON = "No";
 
     private FloatingActionButton addRoutineButton;
     private WorkoutsDatabase workoutsDB;
@@ -69,12 +78,16 @@ public class WorkoutsActivity extends Activity
                         startActivity(iW);
                         break;
                     case R.id.navigation_settings:
-                        Toast.makeText(WorkoutsActivity.this, "3", Toast.LENGTH_SHORT).show();
+                        Intent iS = new Intent(WorkoutsActivity.this, SettingsActivity.class);
+                        startActivity(iS);
                         break;
                 }
                 return true;
             }
         });
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 
     private void initListViews() {
@@ -84,7 +97,7 @@ public class WorkoutsActivity extends Activity
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            int position, long id) {
                 // TODO: alle zugehörigen exercise items aus der Datenbank löschen
-                removeWorkoutAtPosition(position);
+                createAlertDialog(position);
                 return true;
             }
         });
@@ -104,11 +117,47 @@ public class WorkoutsActivity extends Activity
         fillListView();
     }
 
+    private void createAlertDialog(final int position) {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+        alertBuilder.setMessage(ALERT_MESSAGE);
+        alertBuilder.setCancelable(false);
+        alertBuilder.setPositiveButton(ALERT_POSITIVE_BUTTON, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                removeWorkoutAtPosition(position);
+            }
+        });
+        alertBuilder.setNegativeButton(ALERT_NEGATIVE_BUTTON, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+        AlertDialog alert = alertBuilder.create();
+        alert.show();
+    }
+
     private void removeWorkoutAtPosition(int position) {
         if (listItems.get(position) != null) {
+            removeExercises(listItems.get(position));
             workoutsDB.removeWorkoutItem(listItems.get(position));
             refreshArrayList();
         }
+    }
+
+    private void removeExercises(String workoutName) {
+        ArrayList<String> exerciseNames = new ArrayList<>();
+        for (int i = 0; i < workoutsDB.getAllExerciseItems().size(); i++) {
+            if (workoutsDB.getAllExerciseItems().get(i).getWorkoutName().equals(workoutName)) {
+                exerciseNames.add(workoutsDB.getAllExerciseItems().get(i).getName());
+            }
+        }
+
+        for (int i = 0; i < exerciseNames.size(); i++) {
+            workoutsDB.removeExerciseValues(exerciseNames.get(i));
+            workoutsDB.removeExerciseItem(exerciseNames.get(i));
+        }
+
     }
 
     private void refreshArrayList(){
@@ -135,4 +184,8 @@ public class WorkoutsActivity extends Activity
         });
     }
 
+    public void goToSettings(MenuItem item) {
+        Intent i = new Intent(WorkoutsActivity.this, SettingsActivity.class);
+        startActivity(i);
+    }
 }
