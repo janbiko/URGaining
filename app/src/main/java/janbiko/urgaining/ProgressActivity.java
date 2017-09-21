@@ -19,6 +19,8 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
+import java.lang.reflect.Array;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,42 +64,54 @@ public class ProgressActivity extends AppCompatActivity {
     }
 
     private void feedGraph(){
-        //fill sample data
-        List<Integer> weightList = new ArrayList<>();
-        weightList.add(80);
-        weightList.add(80);
-        weightList.add(70);
-        weightList.add(60);
-        weightList.add(65);
-        weightList.add(75);
+        List<Entry> entriesLastEx = new ArrayList<>();
+        if(workoutsDB.getAllExerciseValuesItems("Situps") != null){
+            ArrayList<ArrayList<Float>> exercises = workoutsDB.getAllExerciseValuesItems("Situps");
 
-        List<Entry> entriesWeight = new ArrayList<>();
-        for(int i=0; i<weightList.size(); i++)
-        {
-            entriesWeight.add(new Entry(i+1, weightList.get(i)));
+            if(exercises.size() > 0){
+                ArrayList<Float> lastExercise = exercises.get(exercises.size() - 1);
+                ArrayList<Float> previousExercise;
+
+                if(exercises.size() > 1)
+                    previousExercise = exercises.get(exercises.size() - 2);
+
+                int oneRM;
+                int graphIndex = 0;
+                if(lastExercise.size() >= 2){
+                    for(int i=0; i<lastExercise.size(); i++)
+                    {
+                        if(lastExercise.get(i) != -1){
+                            oneRM = Math.round(lastExercise.get(i) * (1 + (lastExercise.get(i+1) / 30)));            //using 1RM Epley formula
+                            graphIndex++;
+                            entriesLastEx.add(new Entry(graphIndex, oneRM));
+                        }
+                        i++;
+                    }
+                }
+            }
         }
-
+        
         LineChart lineChart = (LineChart) findViewById(R.id.progress_chart);
-        LineDataSet dataSet = new LineDataSet(entriesWeight, "Weight");
+        LineDataSet dataSet = new LineDataSet(entriesLastEx, "1RM Value");
         LineData lineData = new LineData(dataSet);
         lineChart.setData(lineData);
 
-        setGraphAxisStyle(lineChart, weightList.size());
+        setGraphAxisStyle(lineChart, entriesLastEx.size());
         setDataSetStyle(dataSet);
         lineChart.invalidate();     //refresh chart
     }
 
     private void setGraphAxisStyle(LineChart lineChart, int dataSize){
-        float minYValue = 50f;
-        float maxYValue = 150f;
+        float minYValue = 80f;
+        float maxYValue = 180f;
 
         YAxis right = lineChart.getAxisRight();
         right.setDrawGridLines(false);
         right.setDrawLabels(false);
 
         YAxis left = lineChart.getAxisLeft();
-        left.setAxisMinimum(minYValue);
-        left.setAxisMaximum(maxYValue);
+        //left.setAxisMinimum(minYValue);
+        //left.setAxisMaximum(maxYValue);
 
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setDrawGridLines(false);
@@ -112,6 +126,7 @@ public class ProgressActivity extends AppCompatActivity {
 
     private void setDataSetStyle(LineDataSet dataSet){
         dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+        dataSet.setValueTextSize(10f);
         dataSet.setColor(Color.GREEN);
         dataSet.setCircleRadius(5f);
         dataSet.setCircleColor(Color.GREEN);

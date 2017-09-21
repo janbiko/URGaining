@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/name_exercise"
         android:textSize="17sp"
+
         app:layout_marginTopPercent="5%"
         app:layout_marginLeftPercent="5%"
         android:text="@string/exercise_name_placeholder"/>
