@@ -75,12 +75,14 @@ public class ProgressActivity extends AppCompatActivity {
                 previousExercise = exercises.get(exercises.size() - 2);
 
             int oneRM;
+            int graphIndex = 0;
             if(lastExercise.size() >= 2){
                 for(int i=0; i<lastExercise.size(); i++)
                 {
                     if(lastExercise.get(i) != -1){
                         oneRM = Math.round(lastExercise.get(i) * (1 + (lastExercise.get(i+1) / 30)));            //using 1RM Epley formula
-                        entriesLastEx.add(new Entry(i+1, oneRM));
+                        graphIndex++;
+                        entriesLastEx.add(new Entry(graphIndex, oneRM));
                     }
                     i++;
                 }
@@ -93,7 +95,7 @@ public class ProgressActivity extends AppCompatActivity {
         LineData lineData = new LineData(dataSet);
         lineChart.setData(lineData);
 
-        setGraphAxisStyle(lineChart, entriesLastEx.size() / 2);
+        setGraphAxisStyle(lineChart, entriesLastEx.size());
         setDataSetStyle(dataSet);
         lineChart.invalidate();     //refresh chart
     }
