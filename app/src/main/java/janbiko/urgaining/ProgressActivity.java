@@ -1,6 +1,5 @@
 package janbiko.urgaining;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,8 +7,9 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -19,13 +19,17 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
-import java.lang.reflect.Array;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ProgressActivity extends AppCompatActivity {
-    public WorkoutsDatabase workoutsDB;
+    private WorkoutsDatabase workoutsDB;
+
+    private ExpandableListView workoutsList;
+    private android.widget.ExpandableListAdapter listAdapter;
+    private ArrayList<String> workouts;
+    private HashMap<String, List<String>> exercises;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,20 +58,70 @@ public class ProgressActivity extends AppCompatActivity {
         });
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
         initDatabase();
-        feedGraph();
+        //feedGraph();
+
+
+
+
+
+        initUI();
+
+
+
+    }
+
+    private void initUI() {
+        workoutsList = (ExpandableListView) findViewById(R.id.workouts_list);
+
+        workouts = workoutsDB.getAllWorkoutItems();
+        exercises = new HashMap<>();
+
+        for (int i = 0; i < workouts.size(); i++) {
+            List<String> tempExsList = new ArrayList<>();
+            for (int j = 0; j < workoutsDB.getAllExerciseItems().size(); j++) {
+                if (workoutsDB.getAllExerciseItems().get(j).getWorkoutName()
+                        .equals(workouts.get(i))){
+                    tempExsList.add(workoutsDB.getAllExerciseItems().get(j).getName());
+                }
+            }
+            exercises.put(workouts.get(i), tempExsList);
+
+        }
+
+        listAdapter = new ExpandableListAdapter(this, workouts, exercises);
+
+        workoutsList.setAdapter(listAdapter);
+        workoutsList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v,
+                                        int groupPosition, int childPosition, long id) {
+                // TODO Auto-generated method stub
+                Toast.makeText(
+                        getApplicationContext(),
+                        exercises.get(
+                               workouts.get(groupPosition)).get(
+                                childPosition), Toast.LENGTH_SHORT)
+                        .show();
+                feedGraph(exercises.get(workouts.get(groupPosition)).get( childPosition));
+                return false;
+            }
+        });
     }
 
     private void initDatabase() {
         workoutsDB = new WorkoutsDatabase(this);
-        workoutsDB.open(/*"workouts"*/);
+        workoutsDB.open();
     }
 
-    private void feedGraph(){
+    private void feedGraph(String exercise){
         List<Entry> entriesLastEx = new ArrayList<>();
         List<Entry> entriesPrevEx = new ArrayList<>();
-        if(workoutsDB.getAllExerciseValuesItems("Situps") != null){
-            ArrayList<ArrayList<Float>> exercises = workoutsDB.getAllExerciseValuesItems("Situps");
+        if(workoutsDB.getAllExerciseValuesItems(exercise) != null){
+            ArrayList<ArrayList<Float>> exercises = workoutsDB.getAllExerciseValuesItems(exercise);
 
             if(exercises.size() > 0){
                 ArrayList<Float> lastExercise = exercises.get(exercises.size() - 1);

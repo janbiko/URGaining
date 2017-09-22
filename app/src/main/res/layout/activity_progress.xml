@@ -22,6 +22,23 @@
             app:layout_marginTopPercent="12%"
             android:background="@android:color/background_light"/>
 
+       <!-- <ScrollView
+            android:layout_below="@+id/progress_chart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_marginBottomPercent="10%">
+            -->
+            <ExpandableListView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/workouts_list"
+                android:layout_below="@+id/progress_chart"
+                app:layout_marginBottomPercent="10%">
+
+            </ExpandableListView>
+<!--
+        </ScrollView> -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
