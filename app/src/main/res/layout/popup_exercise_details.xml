@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/deload_button"
             app:layout_marginTopPercent="5%"
-            android:background="@color/colorPrimary"
+            android:background="@color/colorAccent"
             app:layout_marginRightPercent="5%"
             android:layout_toLeftOf="@+id/add_values_button"
             android:text="@string/deload_button"/>
@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/add_values_button"
-            android:background="@color/colorPrimary"
+            android:background="@color/colorAccent"
             android:layout_alignParentRight="true"
             app:layout_marginRightPercent="1%"
             app:layout_marginTopPercent="5%"

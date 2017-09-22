@@ -111,7 +111,7 @@ public class WorkoutsActivity extends AppCompatActivity
         });
 
 
-        listAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item,
+        listAdapter = new ArrayAdapter<>(this, R.layout.workout_list_item,
                 listItems);
         workoutNamesList.setAdapter(listAdapter);
         fillListView();

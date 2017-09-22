@@ -31,7 +31,7 @@
         android:id="@+id/create_workout_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorAccent"
         android:textSize="12sp"
         android:text="@string/create_button"
         app:layout_marginTopPercent="40%"

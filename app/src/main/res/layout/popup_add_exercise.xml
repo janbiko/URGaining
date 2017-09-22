@@ -50,7 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/create_button"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorAccent"
         app:layout_marginTopPercent="10%"
         android:layout_below="@id/exercise_name"
         android:layout_alignParentRight="true"
