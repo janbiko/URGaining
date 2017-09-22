@@ -50,6 +50,10 @@ public class WorkoutsDatabase {
     private static final String KEY_SET_7 = "set7";
     private static final String KEY_WEIGHT_8 = "weight8";
     private static final String KEY_SET_8 = "set8";
+    private static final String KEY_WEIGHT_9 = "weight9";
+    private static final String KEY_SET_9 = "set9";
+    private static final String KEY_WEIGHT_10 = "weight10";
+    private static final String KEY_SET_10 = "set10";
 
 
     // Columns
@@ -77,6 +81,10 @@ public class WorkoutsDatabase {
     private static final int COLUMN_SET_7 = 16;
     private static final int COLUMN_WEIGHT_8 = 17;
     private static final int COLUMN_SET_8 = 18;
+    private static final int COLUMN_WEIGHT_9 = 19;
+    private static final int COLUMN_SET_9 = 20;
+    private static final int COLUMN_WEIGHT_10 = 21;
+    private static final int COLUMN_SET_10 = 22;
 
 
 
@@ -142,6 +150,11 @@ public class WorkoutsDatabase {
         itemValues.put(KEY_SET_7, exerciseValues.get(13));
         itemValues.put(KEY_WEIGHT_8, exerciseValues.get(14));
         itemValues.put(KEY_SET_8, exerciseValues.get(15));
+        itemValues.put(KEY_WEIGHT_9, exerciseValues.get(16));
+        itemValues.put(KEY_SET_9, exerciseValues.get(17));
+        itemValues.put(KEY_WEIGHT_10, exerciseValues.get(18));
+        itemValues.put(KEY_SET_10, exerciseValues.get(19));
+
 
         return db.insert(DATABASE_TABLE_EXERCISE_VALUES, null, itemValues);
     }
@@ -220,8 +233,8 @@ public class WorkoutsDatabase {
         Cursor cursor = db.query(DATABASE_TABLE_EXERCISE_VALUES, new String[] {
                 KEY_ID, KEY_EXERCISE, KEY_TIME, KEY_WEIGHT_1, KEY_SET_1, KEY_WEIGHT_2, KEY_SET_2,
                 KEY_WEIGHT_3, KEY_SET_3, KEY_WEIGHT_4, KEY_SET_4, KEY_WEIGHT_5, KEY_SET_5,
-                KEY_WEIGHT_6, KEY_SET_6, KEY_WEIGHT_7, KEY_SET_7, KEY_WEIGHT_8, KEY_SET_8}, null,
-                null, null, null, null);
+                KEY_WEIGHT_6, KEY_SET_6, KEY_WEIGHT_7, KEY_SET_7, KEY_WEIGHT_8, KEY_SET_8,
+                KEY_WEIGHT_9, KEY_SET_9, KEY_WEIGHT_10, KEY_SET_10}, null, null, null, null, null);
 
         if (cursor.moveToFirst()) {
             do {
@@ -244,6 +257,10 @@ public class WorkoutsDatabase {
                     tempList.add(cursor.getFloat(COLUMN_SET_7));
                     tempList.add(cursor.getFloat(COLUMN_WEIGHT_8));
                     tempList.add(cursor.getFloat(COLUMN_SET_8));
+                    tempList.add(cursor.getFloat(COLUMN_WEIGHT_9));
+                    tempList.add(cursor.getFloat(COLUMN_SET_9));
+                    tempList.add(cursor.getFloat(COLUMN_WEIGHT_10));
+                    tempList.add(cursor.getFloat(COLUMN_SET_10));
                     exerciseValues.add(tempList);
                 }
             } while (cursor.moveToNext());
@@ -263,8 +280,8 @@ public class WorkoutsDatabase {
         Cursor cursor = db.query(DATABASE_TABLE_EXERCISE_VALUES, new String[] {
                 KEY_ID, KEY_EXERCISE, KEY_TIME, KEY_WEIGHT_1, KEY_SET_1, KEY_WEIGHT_2, KEY_SET_2,
                 KEY_WEIGHT_3, KEY_SET_3, KEY_WEIGHT_4, KEY_SET_4, KEY_WEIGHT_5, KEY_SET_5,
-                KEY_WEIGHT_6, KEY_SET_6, KEY_WEIGHT_7, KEY_SET_7, KEY_WEIGHT_8, KEY_SET_8}, null,
-                null, null, null, null);
+                KEY_WEIGHT_6, KEY_SET_6, KEY_WEIGHT_7, KEY_SET_7, KEY_WEIGHT_8, KEY_SET_8,
+                KEY_WEIGHT_9, KEY_SET_9, KEY_WEIGHT_10, KEY_SET_10}, null, null, null, null, null);
 
         if (cursor.moveToFirst()) {
             do {
@@ -300,6 +317,10 @@ public class WorkoutsDatabase {
                     latestExerciseValues.add(cursor.getFloat(COLUMN_SET_7));
                     latestExerciseValues.add(cursor.getFloat(COLUMN_WEIGHT_8));
                     latestExerciseValues.add(cursor.getFloat(COLUMN_SET_8));
+                    latestExerciseValues.add(cursor.getFloat(COLUMN_WEIGHT_9));
+                    latestExerciseValues.add(cursor.getFloat(COLUMN_SET_9));
+                    latestExerciseValues.add(cursor.getFloat(COLUMN_WEIGHT_10));
+                    latestExerciseValues.add(cursor.getFloat(COLUMN_SET_10));
                     break;
                 }
             } while (cursor.moveToNext());
@@ -330,7 +351,9 @@ public class WorkoutsDatabase {
                 " float, " + KEY_SET_4 + " integer, " + KEY_WEIGHT_5 + " float, " + KEY_SET_5 +
                 " integer, " + KEY_WEIGHT_6 + " float, " + KEY_SET_6 + " integer, " + KEY_WEIGHT_7 +
                 " float, " + KEY_SET_7 + " integer, " + KEY_WEIGHT_8 + " float, " + KEY_SET_8 +
-                " integer);";
+                " integer, " + KEY_WEIGHT_9 + " float, " + KEY_SET_9 + " integer, " +
+                KEY_WEIGHT_10 + " float, " + KEY_SET_10 + " integer);";
+
 
         public WorkoutDBOpenHelper(Context c, String dbName, SQLiteDatabase.CursorFactory factory, int version) {
             super(c, dbName, factory, version);

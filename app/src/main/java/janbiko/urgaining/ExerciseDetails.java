@@ -32,7 +32,7 @@ import java.util.Set;
 
 public class ExerciseDetails extends Activity{
 
-    private int exerciseValuesSize = 16;
+    private int exerciseValuesSize = 20;
     private float deloadValue;
 
     private String exerciseName;

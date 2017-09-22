@@ -105,7 +105,7 @@ public class AddExercisePopup extends Activity{
         // initializes setCountSpinner and feeds it with values via an adapter
 
         setCountSpinner = (Spinner) findViewById(R.id.set_count_spinner);
-        Integer[] values = new Integer[] {1, 2, 3, 4, 5, 6, 7, 8};
+        Integer[] values = new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         ArrayAdapter<Integer> spinnerAdapter = new ArrayAdapter<>(AddExercisePopup.this,
                 R.layout.support_simple_spinner_dropdown_item, values);
         spinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
