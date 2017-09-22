@@ -120,7 +120,7 @@ public class ProgressActivity extends AppCompatActivity {
     private void feedGraph(String exercise){
         List<Entry> entriesLastEx = new ArrayList<>();
         List<Entry> entriesPrevEx = new ArrayList<>();
-        if(workoutsDB.getAllExerciseValuesItems(exercise) != null){
+        if(workoutsDB.getAllExerciseValuesItems(exercise).size() > 0){
             ArrayList<ArrayList<Float>> exercises = workoutsDB.getAllExerciseValuesItems(exercise);
 
             if(exercises.size() > 0){
@@ -162,20 +162,23 @@ public class ProgressActivity extends AppCompatActivity {
             }
         }
 
-        LineChart lineChart = (LineChart) findViewById(R.id.progress_chart);
-        LineDataSet dataSetLast = new LineDataSet(entriesLastEx, "1RM - currently");
-        LineDataSet dataSetPrev = new LineDataSet(entriesPrevEx, "1RM - previously");
 
-        LineData lineData = new LineData();
-        lineData.addDataSet(dataSetLast);
-        lineData.addDataSet(dataSetPrev);
-        lineChart.setData(lineData);
+        if(workoutsDB.getAllExerciseValuesItems(exercise).size() > 0) {
+            LineChart lineChart = (LineChart) findViewById(R.id.progress_chart);
+            LineDataSet dataSetLast = new LineDataSet(entriesLastEx, "1RM - currently");
+            LineDataSet dataSetPrev = new LineDataSet(entriesPrevEx, "1RM - previously");
 
-        setGraphAxisStyle(lineChart, entriesLastEx.size());
-        setDataSetLastStyle(dataSetLast);
-        setDataSetPrevStyle(dataSetPrev);
+            LineData lineData = new LineData();
+            lineData.addDataSet(dataSetLast);
+            lineData.addDataSet(dataSetPrev);
+            lineChart.setData(lineData);
 
-        lineChart.invalidate();     //refresh chart
+            setGraphAxisStyle(lineChart, entriesLastEx.size());
+            setDataSetLastStyle(dataSetLast);
+            setDataSetPrevStyle(dataSetPrev);
+
+            lineChart.invalidate();     //refresh chart
+        }
     }
 
     private void setGraphAxisStyle(LineChart lineChart, int dataSize){
