@@ -26,7 +26,7 @@ public class MainActivity extends Activity {
         testLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent testIntent = new Intent(MainActivity.this, LoginActivity.class);
+                Intent testIntent = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivity(testIntent);
             }
         });
