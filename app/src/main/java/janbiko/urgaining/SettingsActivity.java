@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -53,14 +54,12 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+
         FacebookSdk.sdkInitialize(getApplicationContext());
-
-
-
+        setContentView(R.layout.activity_settings);
 
         initLogin();
-
+        initLogout();
 
         initPrefs();
         initUI();
@@ -68,29 +67,48 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void initLogin() {
         callbackManager = CallbackManager.Factory.create();
-        loginButton = (LoginButton) findViewById(R.id.login_button);
-        textStatus = (TextView) findViewById(R.id.text_status);
-        LoginManager.getInstance().registerCallback(callbackManager,
-                new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        // App code
-                        textStatus.setText("Success!");
-                    }
+        loginButton = (LoginButton) findViewById(R.id.settings_login_button);
+        textStatus = (TextView) findViewById(R.id.text_status_login);
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                String succ = "Success! Result: " + loginResult.toString();
+                textStatus.setText(succ);
+                // App code
+            }
 
-                    @Override
-                    public void onCancel() {
-                        // App code
-                        textStatus.setText("Cancelled!");
-                    }
+            @Override
+            public void onCancel() {
+                String canc = "Cancelled!";
+                textStatus.setText(canc);
+                // App code
+            }
 
-                    @Override
-                    public void onError(FacebookException exception) {
-                        // App code
-                        textStatus.setText("Error!");
-                    }
-                });
+            @Override
+            public void onError(FacebookException exception) {
+                String err = "Error! Result: " + exception.toString();
+                textStatus.setText(err);
+                // App code
+            }
+        });
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void initLogout() {
+
+        Button logOutButton = (Button) findViewById(R.id.settings_logout_button);
+        logOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LoginManager.getInstance().logOut();
+            }
+        });
     }
 
     private void initPrefs() {

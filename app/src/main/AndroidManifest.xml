@@ -3,6 +3,9 @@
     package="janbiko.urgaining">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <provider android:authorities="com.facebook.app.FacebookContentProvider116526152373574"
+        android:name="com.facebook.FacebookContentProvider"
+        android:exported="true"/>
 
     <application
         android:allowBackup="true"
@@ -47,9 +50,6 @@
             android:theme="@style/AppTheme.PopupTheme">
         </activity>
 
-        <meta-data
-            android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id" />
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
