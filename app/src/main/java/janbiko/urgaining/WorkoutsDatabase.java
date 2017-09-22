@@ -24,6 +24,7 @@ public class WorkoutsDatabase {
     private static final String DATABASE_TABLE_WORKOUTS = "workouts";
     private static final String DATABASE_TABLE_EXERCISES = "exercises";
     private static final String DATABASE_TABLE_EXERCISE_VALUES = "exercisevalues";
+    private static final String DATABASE_TABLE_TOTAL = "total";
 
 
     // keys
@@ -159,6 +160,15 @@ public class WorkoutsDatabase {
         return db.insert(DATABASE_TABLE_EXERCISE_VALUES, null, itemValues);
     }
 
+
+    public long insertTotalItem(String item) {
+        // adds new exercise to total calculation
+
+        ContentValues itemValues = new ContentValues();
+        itemValues.put(KEY_EXERCISE, item);
+        return db.insert(DATABASE_TABLE_TOTAL, null, itemValues);
+    }
+
     public void removeWorkoutItem(String item) {
         // removes workout from database based on delivered string
 
@@ -181,6 +191,33 @@ public class WorkoutsDatabase {
         String toDelete = KEY_EXERCISE + "=?";
         String[] deleteArguments = new String[]{exerciseName};
         db.delete(DATABASE_TABLE_EXERCISE_VALUES, toDelete, deleteArguments);
+    }
+
+    public void removeTotalItem(String item) {
+        // removes exercise from total calculation
+
+        String toDelete = KEY_EXERCISE + "=?";
+        String[] deleteArguments = new String[] {item};
+        db.delete(DATABASE_TABLE_TOTAL, toDelete, deleteArguments);
+    }
+
+    public ArrayList<String> getAllTotalItems() {
+        // returns a list containing all exercises involved in total calculation
+
+        ArrayList<String> items = new ArrayList<>();
+        Cursor cursor = db.query(DATABASE_TABLE_TOTAL, new String[] {
+                KEY_ID, KEY_EXERCISE}, null, null, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                String exercise = cursor.getString(COLUMN_EXERCISE_INDEX);
+
+                items.add(exercise);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return items;
     }
 
     public ArrayList<String> getAllWorkoutItems() {
@@ -354,6 +391,11 @@ public class WorkoutsDatabase {
                 " integer, " + KEY_WEIGHT_9 + " float, " + KEY_SET_9 + " integer, " +
                 KEY_WEIGHT_10 + " float, " + KEY_SET_10 + " integer);";
 
+        private static final String DATABASE_CREATE_TOTAL = "create table " +
+                DATABASE_TABLE_TOTAL + " (" + KEY_ID +
+                " integer primary key autoincrement, " + KEY_EXERCISE +
+                " text not null);";
+
 
         public WorkoutDBOpenHelper(Context c, String dbName, SQLiteDatabase.CursorFactory factory, int version) {
             super(c, dbName, factory, version);
@@ -364,6 +406,7 @@ public class WorkoutsDatabase {
             db.execSQL(DATABASE_CREATE);
             db.execSQL(DATABASE_CREATE_EXERCISES);
             db.execSQL(DATABASE_CREATE_EXERCISE_VALUES);
+            db.execSQL(DATABASE_CREATE_TOTAL);
         }
 
         @Override

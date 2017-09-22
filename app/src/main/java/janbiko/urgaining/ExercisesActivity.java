@@ -159,6 +159,7 @@ public class ExercisesActivity extends AppCompatActivity {
 
         if (listItems.get(position) != null) {
             workoutsDB.open();
+            workoutsDB.removeTotalItem(listItems.get(position));
             workoutsDB.removeExerciseItem(listItems.get(position));
             workoutsDB.removeExerciseValues(listItems.get(position));
             workoutsDB.close();

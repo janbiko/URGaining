@@ -151,7 +151,7 @@ public class WorkoutsActivity extends AppCompatActivity
 
     private void removeExercises(String workoutName) {
         // gets all exercises associated with the selected workout and deletes them and its values
-        // from the database
+        // from the database and the total calculation
 
         ArrayList<String> exerciseNames = new ArrayList<>();
         workoutsDB.open();
@@ -162,6 +162,7 @@ public class WorkoutsActivity extends AppCompatActivity
         }
 
         for (int i = 0; i < exerciseNames.size(); i++) {
+            workoutsDB.removeTotalItem(exerciseNames.get(i));
             workoutsDB.removeExerciseValues(exerciseNames.get(i));
             workoutsDB.removeExerciseItem(exerciseNames.get(i));
         }

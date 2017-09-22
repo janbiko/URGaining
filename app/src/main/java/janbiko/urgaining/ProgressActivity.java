@@ -1,15 +1,20 @@
 package janbiko.urgaining;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -25,8 +30,13 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ProgressActivity extends AppCompatActivity {
-    private WorkoutsDatabase workoutsDB;
 
+    private static final String ALERT_POSITIVE_BUTTON = "Yes";
+    private static final String ALERT_NEGATIVE_BUTTON = "No";
+
+    private int total = 0;
+    private TextView totalTextView;
+    private WorkoutsDatabase workoutsDB;
     private ExpandableListView workoutsList;
     private android.widget.ExpandableListAdapter listAdapter;
     private ArrayList<String> workouts;
@@ -65,8 +75,21 @@ public class ProgressActivity extends AppCompatActivity {
         lineChart = (LineChart) findViewById(R.id.progress_chart);
         lineChart.setVisibility(View.INVISIBLE);
 
+
+
         initDatabase();
         initExpandableList();
+        calculateTotal();
+        initTotalTextView();
+    }
+
+    private void initTotalTextView() {
+        totalTextView = (TextView) findViewById(R.id.total_text);
+        updateTotalTextView();
+    }
+
+    private void updateTotalTextView() {
+        totalTextView.setText("" + total + "kg total.");
     }
 
     private void initExpandableList() {
@@ -97,16 +120,126 @@ public class ProgressActivity extends AppCompatActivity {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
-                //Toast.makeText(getApplicationContext(),exercises.get(workouts.get(groupPosition))
-                // .get(childPosition), Toast.LENGTH_SHORT).show();
-                feedGraph(exercises.get(workouts.get(groupPosition)).get( childPosition));
+                feedGraph(exercises.get(workouts.get(groupPosition)).get(childPosition));
+                return false;
+            }
+        });
+
+        workoutsList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position,
+                                           long id) {
+                if (ExpandableListView.getPackedPositionType(id) ==
+                        ExpandableListView.PACKED_POSITION_TYPE_CHILD){
+                    int groupPosition = ExpandableListView.getPackedPositionGroup(id);
+                    int childPosition = ExpandableListView.getPackedPositionChild(id);
+                    String exerciseName = exercises.get(workouts.get(groupPosition)).
+                            get(childPosition);
+
+                    createAlertDialog(exerciseName);
+
+                    return true;
+                }
+
                 return false;
             }
         });
     }
 
+    private void createAlertDialog(final String exerciseName) {
+
+        if (!checkIfExerciseAlreadyInTotal(exerciseName)) {
+            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+            alertBuilder.setMessage("Do you want to add " + exerciseName + " to your total?");
+            alertBuilder.setCancelable(false);
+            alertBuilder.setPositiveButton(ALERT_POSITIVE_BUTTON, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    addExerciseToTotal(exerciseName);
+                }
+            });
+            alertBuilder.setNegativeButton(ALERT_NEGATIVE_BUTTON, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.cancel();
+                }
+            });
+
+            AlertDialog alert = alertBuilder.create();
+            alert.show();
+        } else {
+            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+            alertBuilder.setMessage("Do you want to remove " + exerciseName + " from your total?");
+            alertBuilder.setCancelable(false);
+            alertBuilder.setPositiveButton(ALERT_POSITIVE_BUTTON, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    removeExerciseFromTotal(exerciseName);
+                }
+            });
+            alertBuilder.setNegativeButton(ALERT_NEGATIVE_BUTTON, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.cancel();
+                }
+            });
+
+            AlertDialog alert = alertBuilder.create();
+            alert.show();
+        }
+    }
+
+    private void removeExerciseFromTotal(String exerciseName) {
+        workoutsDB.open();
+        workoutsDB.removeTotalItem(exerciseName);
+        workoutsDB.close();
+        calculateTotal();
+        updateTotalTextView();
+    }
+
+    private boolean checkIfExerciseAlreadyInTotal(String exerciseName) {
+
+        workoutsDB.open();
+        ArrayList<String> exercisesTotal = workoutsDB.getAllTotalItems();
+        workoutsDB.close();
+        for (int i = 0; i < exercisesTotal.size(); i++) {
+            if (exercisesTotal.get(i).equals(exerciseName)) return true;
+        }
+        return false;
+    }
+
+    private void addExerciseToTotal(String exercise) {
+        workoutsDB.open();
+
+        if (workoutsDB.getAllExerciseValuesItems(exercise).size() == 0) {
+            Toast.makeText(getApplicationContext(),
+                    "There are no values stored for this exercise.", Toast.LENGTH_LONG).show();
+        } else {
+            workoutsDB.insertTotalItem(exercise);
+            calculateTotal();
+            updateTotalTextView();
+        }
+
+        workoutsDB.close();
+    }
+
     private void initDatabase() {
         workoutsDB = new WorkoutsDatabase(this);
+    }
+
+    private void calculateTotal() {
+        total = 0;
+        workoutsDB.open();
+        ArrayList<String> totalExercises = workoutsDB.getAllTotalItems();
+        ArrayList<ArrayList<Float>> latestExValues = new ArrayList<>();
+        for (int i = 0; i < totalExercises.size(); i++) {
+            latestExValues.add(workoutsDB.getLatestExerciseValuesItem(totalExercises.get(i)));
+        }
+        for (int i = 0; i < latestExValues.size(); i++) {
+            total += epleyFormula(latestExValues.get(i).get(0), latestExValues.get(i).get(1));
+        }
+
+        workoutsDB.close();
     }
 
     private void feedGraph(String exercise){
@@ -151,6 +284,7 @@ public class ProgressActivity extends AppCompatActivity {
             lineChart.invalidate();     //refresh chart
         }
         else {
+            lineChart.setVisibility(View.INVISIBLE);
             Toast.makeText(getApplicationContext(), "No data available.", Toast.LENGTH_LONG).show();
         }
         workoutsDB.close();
@@ -210,6 +344,5 @@ public class ProgressActivity extends AppCompatActivity {
         dataSet.setLineWidth(2.5f);
         dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
     }
-
 
 }
