@@ -13,6 +13,7 @@ import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -59,18 +60,8 @@ public class ProgressActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         initDatabase();
-        //feedGraph();
-
-
-
-
-
         initUI();
-
-
-
     }
 
     private void initUI() {
@@ -99,13 +90,8 @@ public class ProgressActivity extends AppCompatActivity {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
-                // TODO Auto-generated method stub
-                Toast.makeText(
-                        getApplicationContext(),
-                        exercises.get(
-                               workouts.get(groupPosition)).get(
-                                childPosition), Toast.LENGTH_SHORT)
-                        .show();
+                //Toast.makeText(getApplicationContext(),exercises.get(workouts.get(groupPosition))
+                // .get(childPosition), Toast.LENGTH_SHORT).show();
                 feedGraph(exercises.get(workouts.get(groupPosition)).get( childPosition));
                 return false;
             }
@@ -118,54 +104,63 @@ public class ProgressActivity extends AppCompatActivity {
     }
 
     private void feedGraph(String exercise){
-        List<Entry> entriesLastEx = new ArrayList<>();
+        List<Entry> oneRMEntries = new ArrayList<>();
         if(workoutsDB.getAllExerciseValuesItems(exercise).size() > 0){
             ArrayList<ArrayList<Float>> exercises = workoutsDB.getAllExerciseValuesItems(exercise);
 
-            int OneRM;
-            int GraphIndex = 0;
-            for (int i = 0; i < exercises.size(); i++) {
-                OneRM = Math.round(exercises.get(i).get(0) * (1 + (exercises.get(i).get(1) / 30)));
-                GraphIndex++;
-                entriesLastEx.add(new Entry(GraphIndex, OneRM));
-            }
-
-
-            /*
-            ArrayList<Float> lastExercise = exercises.get(exercises.size() - 1);
-
-            //1st graph - for last exercise
+            int oneRMFirstEntry = 0;
+            int oneRMLastEntry = 0;
             int oneRM;
             int graphIndex = 0;
-            if(lastExercise.size() >= 2){
-                for(int i=0; i<lastExercise.size(); i++)
-                {
-                    if(lastExercise.get(i) != -1){
-                        oneRM = Math.round(lastExercise.get(i) * (1 + (lastExercise.get(i+1) / 30)));            //using 1RM Epley formula
-                        graphIndex++;
-                        entriesLastEx.add(new Entry(graphIndex, oneRM));
-                    }
-                    i++;
-                }
+            for (int i = 0; i < exercises.size(); i++) {
+                oneRM = epleyFormula(exercises.get(i).get(0), exercises.get(i).get(1));
+                graphIndex++;
+                oneRMEntries.add(new Entry(graphIndex, oneRM));
+                if (i == 0) oneRMFirstEntry = oneRM;
+                if (i == exercises.size() - 1) oneRMLastEntry = oneRM;
             }
 
-        }
-*/
+            float percIncrease = calculatePercentageIncrease(oneRMFirstEntry, oneRMLastEntry);
 
-        if(workoutsDB.getAllExerciseValuesItems(exercise).size() > 0) {
             LineChart lineChart = (LineChart) findViewById(R.id.progress_chart);
-            LineDataSet dataSetLast = new LineDataSet(entriesLastEx, "1RM - currently");
+            setGraphDescription(lineChart, percIncrease);
+            LineDataSet dataSetLast = new LineDataSet(oneRMEntries, "1RM");
 
             LineData lineData = new LineData();
             lineData.addDataSet(dataSetLast);
             lineChart.setData(lineData);
 
-            setGraphAxisStyle(lineChart, entriesLastEx.size());
+            setGraphAxisStyle(lineChart, oneRMEntries.size());
             setDataSetLastStyle(dataSetLast);
 
             lineChart.invalidate();     //refresh chart
         }
+        else {
+            Toast.makeText(getApplicationContext(), "No data available.", Toast.LENGTH_LONG).show();
+        }
     }
+
+    private void setGraphDescription(LineChart lineChart, float percIncrease) {
+        Description description = new Description();
+        if (percIncrease >= 0) {
+            description.setText(""+ percIncrease + "% 1RM increase since first record");
+        }
+        else {
+            description.setText(""+ Math.abs(percIncrease) + "% 1RM decrease since first record");
+        }
+        lineChart.setDescription(description);
+    }
+
+    private float calculatePercentageIncrease (float start, float end) {
+        float value = (end / start - 1) * 10000;
+        // round to 2 decimals
+        int val = (int) value;
+
+        return (float) val / 100;
+    }
+
+    private int epleyFormula (float weight, float repetitions) {
+        return Math.round(weight * (1 + (repetitions / 30)));
     }
 
     private void setGraphAxisStyle(LineChart lineChart, int dataSize){
@@ -188,7 +183,6 @@ public class ProgressActivity extends AppCompatActivity {
 
         lineChart.setDrawGridBackground(false);
         lineChart.setTouchEnabled(false);
-        lineChart.getDescription().setEnabled(false);
     }
 
     private void setDataSetLastStyle(LineDataSet dataSet){
@@ -201,18 +195,5 @@ public class ProgressActivity extends AppCompatActivity {
         dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
     }
 
-    private void setDataSetPrevStyle(LineDataSet dataSet){
-        dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
-        dataSet.setValueTextSize(10f);
-        dataSet.setColor(Color.MAGENTA);
-        dataSet.setCircleRadius(5f);
-        dataSet.setCircleColor(Color.MAGENTA);
-        dataSet.setLineWidth(2.5f);
-        dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-    }
 
-    public void goToSettings(MenuItem item) {
-        Intent i = new Intent(ProgressActivity.this, SettingsActivity.class);
-        startActivity(i);
-    }
 }
