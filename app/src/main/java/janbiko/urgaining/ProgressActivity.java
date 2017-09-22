@@ -31,6 +31,8 @@ public class ProgressActivity extends AppCompatActivity {
     private android.widget.ExpandableListAdapter listAdapter;
     private ArrayList<String> workouts;
     private HashMap<String, List<String>> exercises;
+    private LineChart lineChart;
+    private String currentExercise = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,9 @@ public class ProgressActivity extends AppCompatActivity {
         });
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        lineChart = (LineChart) findViewById(R.id.progress_chart);
+        lineChart.setVisibility(View.INVISIBLE);
 
         initDatabase();
         initExpandableList();
@@ -105,6 +110,15 @@ public class ProgressActivity extends AppCompatActivity {
     }
 
     private void feedGraph(String exercise){
+        if (exercise.equals(currentExercise)) {
+            lineChart.setVisibility(View.INVISIBLE);
+            currentExercise = "";
+        } else {
+            lineChart.setVisibility(View.VISIBLE);
+            currentExercise = exercise;
+        }
+
+
         List<Entry> oneRMEntries = new ArrayList<>();
         workoutsDB.open();
         if(workoutsDB.getAllExerciseValuesItems(exercise).size() > 0){
@@ -124,7 +138,6 @@ public class ProgressActivity extends AppCompatActivity {
 
             float percIncrease = calculatePercentageIncrease(oneRMFirstEntry, oneRMLastEntry);
 
-            LineChart lineChart = (LineChart) findViewById(R.id.progress_chart);
             setGraphDescription(lineChart, percIncrease);
             LineDataSet dataSetLast = new LineDataSet(oneRMEntries, "1RM");
 
