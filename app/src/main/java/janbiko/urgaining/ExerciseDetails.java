@@ -68,7 +68,6 @@ public class ExerciseDetails extends Activity{
 
     private void initDatabase() {
         workoutsDB = new WorkoutsDatabase(this);
-        workoutsDB.open();
     }
 
     private void initUI() {
@@ -104,7 +103,9 @@ public class ExerciseDetails extends Activity{
         // gets the latest exercise values from the database and puts them in the corresponding
         // TextViews
 
+        workoutsDB.open();
         ArrayList<Float> latestValues = workoutsDB.getLatestExerciseValuesItem(exerciseName);
+        workoutsDB.close();
         if (latestValues.size() == exerciseValuesSize) {
             int j = 0;
             for (int i = 1; i < kg2.getChildCount(); i++) {
@@ -190,8 +191,11 @@ public class ExerciseDetails extends Activity{
                 exerciseValues.add(-1f);
             }
 
-            Toast.makeText(getApplicationContext(), "Added successfully.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Added successfully.", Toast.LENGTH_SHORT)
+                    .show();
+            workoutsDB.open();
             workoutsDB.insertExerciseValuesItem(exerciseName, exerciseValues, timeStamp);
+            workoutsDB.close();
             finish();
         }
     }
@@ -238,12 +242,14 @@ public class ExerciseDetails extends Activity{
     private void getSets() {
         // gets the amount of sets for the current exercise from the database
 
+        workoutsDB.open();
         for (int i = 0; i < workoutsDB.getAllExerciseItems().size(); i++) {
             if (workoutsDB.getAllExerciseItems().get(i).getName().equals(exerciseName)) {
                 sets = workoutsDB.getAllExerciseItems().get(i).getSets();
                 break;
             }
         }
+        workoutsDB.close();
     }
 
     private void setPopupWindowSize() {

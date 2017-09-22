@@ -41,7 +41,6 @@ public class AddExercisePopup extends Activity{
 
     private void initDatabase() {
         workoutsDB = new WorkoutsDatabase(this);
-        workoutsDB.open();
     }
 
     private void initUI() {
@@ -79,7 +78,9 @@ public class AddExercisePopup extends Activity{
                     Toast.LENGTH_SHORT).show();
         }
         else if (!exerciseAlreadyExisting(exerciseName)) {
+            workoutsDB.open();
             workoutsDB.insertExerciseItem(exercise);
+            workoutsDB.close();
             Toast.makeText(getApplicationContext(), exerciseName + " created.",
                     Toast.LENGTH_SHORT).show();
         }
@@ -92,9 +93,11 @@ public class AddExercisePopup extends Activity{
     private boolean exerciseAlreadyExisting(String name) {
         // checks if exercise name already exists in the database
 
+        workoutsDB.open();
         for (int i = 0; i < workoutsDB.getAllExerciseItems().size(); i++) {
             if (name.equals(workoutsDB.getAllExerciseItems().get(i).getName())) return true;
         }
+        workoutsDB.close();
         return false;
     }
 

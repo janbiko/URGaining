@@ -61,12 +61,13 @@ public class ProgressActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         initDatabase();
-        initUI();
+        initExpandableList();
     }
 
-    private void initUI() {
+    private void initExpandableList() {
         workoutsList = (ExpandableListView) findViewById(R.id.workouts_list);
 
+        workoutsDB.open();
         workouts = workoutsDB.getAllWorkoutItems();
         exercises = new HashMap<>();
 
@@ -81,6 +82,7 @@ public class ProgressActivity extends AppCompatActivity {
             exercises.put(workouts.get(i), tempExsList);
 
         }
+        workoutsDB.close();
 
         listAdapter = new ExpandableListAdapter(this, workouts, exercises);
 
@@ -100,11 +102,11 @@ public class ProgressActivity extends AppCompatActivity {
 
     private void initDatabase() {
         workoutsDB = new WorkoutsDatabase(this);
-        workoutsDB.open();
     }
 
     private void feedGraph(String exercise){
         List<Entry> oneRMEntries = new ArrayList<>();
+        workoutsDB.open();
         if(workoutsDB.getAllExerciseValuesItems(exercise).size() > 0){
             ArrayList<ArrayList<Float>> exercises = workoutsDB.getAllExerciseValuesItems(exercise);
 
@@ -138,6 +140,7 @@ public class ProgressActivity extends AppCompatActivity {
         else {
             Toast.makeText(getApplicationContext(), "No data available.", Toast.LENGTH_LONG).show();
         }
+        workoutsDB.close();
     }
 
     private void setGraphDescription(LineChart lineChart, float percIncrease) {

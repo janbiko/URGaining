@@ -58,6 +58,6 @@ public class MainActivity extends Activity {
 
     private void initDatabase() {
         workoutsDB = new WorkoutsDatabase(this);
-        workoutsDB.open(/*"workouts"*/);
+        workoutsDB.open();
     }
 }

@@ -15,7 +15,7 @@ import android.widget.Toast;
 public class AddWorkoutPopup extends Activity{
 
     private EditText nameInput;
-    private WorkoutsDatabase workoutsDatabase;
+    private WorkoutsDatabase workoutsDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +29,7 @@ public class AddWorkoutPopup extends Activity{
     }
 
     private void initDatabase() {
-        workoutsDatabase = new WorkoutsDatabase(this);
-        workoutsDatabase.open();
+        workoutsDB = new WorkoutsDatabase(this);
     }
 
     private void initUI() {
@@ -64,7 +63,9 @@ public class AddWorkoutPopup extends Activity{
                     Toast.LENGTH_SHORT).show();
         }
         else if (!workoutAlreadyExisting(workoutName)) {
-            workoutsDatabase.insertWorkoutItem(workoutName);
+            workoutsDB.open();
+            workoutsDB.insertWorkoutItem(workoutName);
+            workoutsDB.close();
             Toast.makeText(getApplicationContext(), workoutName + " created.",
                     Toast.LENGTH_SHORT).show();
         }
@@ -77,9 +78,11 @@ public class AddWorkoutPopup extends Activity{
     private boolean workoutAlreadyExisting(String name) {
         // checks if workout name already exists in the database
 
-        for (int i = 0; i < workoutsDatabase.getAllWorkoutItems().size(); i++) {
-            if (name.equals(workoutsDatabase.getAllWorkoutItems().get(i))) return true;
+        workoutsDB.open();
+        for (int i = 0; i < workoutsDB.getAllWorkoutItems().size(); i++) {
+            if (name.equals(workoutsDB.getAllWorkoutItems().get(i))) return true;
         }
+        workoutsDB.close();
         return false;
     }
 

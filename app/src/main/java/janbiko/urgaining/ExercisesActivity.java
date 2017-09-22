@@ -28,7 +28,6 @@ import java.util.ArrayList;
 
 public class ExercisesActivity extends AppCompatActivity {
 
-    private static final String ALERT_MESSAGE = "Do you want to delete this exercise?";
     private static final String ALERT_POSITIVE_BUTTON = "Yes";
     private static final String ALERT_NEGATIVE_BUTTON = "No";
 
@@ -58,7 +57,6 @@ public class ExercisesActivity extends AppCompatActivity {
 
     private void initDatabase() {
         workoutsDB = new WorkoutsDatabase(this);
-        workoutsDB.open();
     }
 
     private void initUI() {
@@ -112,7 +110,7 @@ public class ExercisesActivity extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
                 // creates an alert dialog onLongClick
 
-                createAlertDialog(position);
+                createAlertDialog(position, listItems.get(position));
                 return true;
             }
         });
@@ -134,11 +132,11 @@ public class ExercisesActivity extends AppCompatActivity {
         fillListView();
     }
 
-    private void createAlertDialog(final int position) {
+    private void createAlertDialog(final int position, String exerciseName) {
         // creates an alert dialog to ask the user, if he wants to delete the selected exercise
 
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
-        alertBuilder.setMessage(ALERT_MESSAGE);
+        alertBuilder.setMessage("Do you want to delete " + exerciseName + " exercise?");
         alertBuilder.setCancelable(false);
         alertBuilder.setPositiveButton(ALERT_POSITIVE_BUTTON, new DialogInterface.OnClickListener() {
             @Override
@@ -160,19 +158,23 @@ public class ExercisesActivity extends AppCompatActivity {
         // deletes the delivered exercise and its values from the database
 
         if (listItems.get(position) != null) {
+            workoutsDB.open();
             workoutsDB.removeExerciseItem(listItems.get(position));
             workoutsDB.removeExerciseValues(listItems.get(position));
+            workoutsDB.close();
             refreshArrayList();
         }
     }
 
     private void refreshArrayList() {
         ArrayList<String> tempList = new ArrayList<>();
+        workoutsDB.open();
         for (int i = 0; i < workoutsDB.getAllExerciseItems().size(); i++) {
             if (workoutsDB.getAllExerciseItems().get(i).getWorkoutName().equals(workoutName)) {
                 tempList.add(workoutsDB.getAllExerciseItems().get(i).getName());
             }
         }
+        workoutsDB.close();
         listItems.clear();
         listItems.addAll(tempList);
         listAdapter.notifyDataSetChanged();
@@ -183,11 +185,13 @@ public class ExercisesActivity extends AppCompatActivity {
         // ListView
 
         ArrayList<String> exerciseNames = new ArrayList<>();
+        workoutsDB.open();
         for (int i = 0; i < workoutsDB.getAllExerciseItems().size(); i++) {
             if (workoutsDB.getAllExerciseItems().get(i).getWorkoutName().equals(workoutName)) {
                 exerciseNames.add(workoutsDB.getAllExerciseItems().get(i).getName());
             }
         }
+        workoutsDB.close();
         listItems.addAll(exerciseNames);
         listAdapter.notifyDataSetChanged();
     }
