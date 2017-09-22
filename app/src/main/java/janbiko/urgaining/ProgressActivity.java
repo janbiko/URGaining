@@ -119,66 +119,53 @@ public class ProgressActivity extends AppCompatActivity {
 
     private void feedGraph(String exercise){
         List<Entry> entriesLastEx = new ArrayList<>();
-        List<Entry> entriesPrevEx = new ArrayList<>();
         if(workoutsDB.getAllExerciseValuesItems(exercise).size() > 0){
             ArrayList<ArrayList<Float>> exercises = workoutsDB.getAllExerciseValuesItems(exercise);
 
-            if(exercises.size() > 0){
-                ArrayList<Float> lastExercise = exercises.get(exercises.size() - 1);
-                ArrayList<Float> previousExercise;
+            int OneRM;
+            int GraphIndex = 0;
+            for (int i = 0; i < exercises.size(); i++) {
+                OneRM = Math.round(exercises.get(i).get(0) * (1 + (exercises.get(i).get(1) / 30)));
+                GraphIndex++;
+                entriesLastEx.add(new Entry(GraphIndex, OneRM));
+            }
 
-                //1st graph - for last exercise
-                int oneRM;
-                int graphIndex = 0;
-                if(lastExercise.size() >= 2){
-                    for(int i=0; i<lastExercise.size(); i++)
-                    {
-                        if(lastExercise.get(i) != -1){
-                            oneRM = Math.round(lastExercise.get(i) * (1 + (lastExercise.get(i+1) / 30)));            //using 1RM Epley formula
-                            graphIndex++;
-                            entriesLastEx.add(new Entry(graphIndex, oneRM));
-                        }
-                        i++;
+
+            /*
+            ArrayList<Float> lastExercise = exercises.get(exercises.size() - 1);
+
+            //1st graph - for last exercise
+            int oneRM;
+            int graphIndex = 0;
+            if(lastExercise.size() >= 2){
+                for(int i=0; i<lastExercise.size(); i++)
+                {
+                    if(lastExercise.get(i) != -1){
+                        oneRM = Math.round(lastExercise.get(i) * (1 + (lastExercise.get(i+1) / 30)));            //using 1RM Epley formula
+                        graphIndex++;
+                        entriesLastEx.add(new Entry(graphIndex, oneRM));
                     }
-                }
-
-                //2nd graph - for previous exercise
-                if(exercises.size() > 1){
-                    previousExercise = exercises.get(exercises.size() - 2);
-
-                    graphIndex = 0;
-                    if(previousExercise.size() >= 2){
-                        for(int i=0; i<previousExercise.size(); i++)
-                        {
-                            if(previousExercise.get(i) != -1){
-                                oneRM = Math.round(previousExercise.get(i) * (1 + (previousExercise.get(i+1) / 30)));
-                                graphIndex++;
-                                entriesPrevEx.add(new Entry(graphIndex, oneRM));
-                            }
-                            i++;
-                        }
-                    }
+                    i++;
                 }
             }
-        }
 
+        }
+*/
 
         if(workoutsDB.getAllExerciseValuesItems(exercise).size() > 0) {
             LineChart lineChart = (LineChart) findViewById(R.id.progress_chart);
             LineDataSet dataSetLast = new LineDataSet(entriesLastEx, "1RM - currently");
-            LineDataSet dataSetPrev = new LineDataSet(entriesPrevEx, "1RM - previously");
 
             LineData lineData = new LineData();
             lineData.addDataSet(dataSetLast);
-            lineData.addDataSet(dataSetPrev);
             lineChart.setData(lineData);
 
             setGraphAxisStyle(lineChart, entriesLastEx.size());
             setDataSetLastStyle(dataSetLast);
-            setDataSetPrevStyle(dataSetPrev);
 
             lineChart.invalidate();     //refresh chart
         }
+    }
     }
 
     private void setGraphAxisStyle(LineChart lineChart, int dataSize){
