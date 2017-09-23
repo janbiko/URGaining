@@ -17,12 +17,28 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="100dp"
             android:id="@+id/total_text"
             android:gravity="center"
             android:text="@string/total_placeholder"
             android:textSize="40sp"
             app:layout_marginTopPercent="12%"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_below="@+id/total_text">
+
+            <com.facebook.share.widget.ShareButton
+                android:id="@+id/share_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:background="@color/colorPrimary"
+                />
+
+        </RelativeLayout>
+
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/progress_chart"
