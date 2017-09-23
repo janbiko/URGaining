@@ -2,6 +2,7 @@ package janbiko.urgaining;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareButton;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
@@ -45,6 +48,8 @@ public class ProgressActivity extends AppCompatActivity {
     private HashMap<String, List<String>> exercises;
     private LineChart lineChart;
     private String currentExercise = "";
+
+    private ShareButton shareButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,11 +93,13 @@ public class ProgressActivity extends AppCompatActivity {
     }
 
     private void initShareButton() {
-        ShareButton shareButton = (ShareButton) findViewById(R.id.share_button);
-        ShareLinkContent content = new ShareLinkContent.Builder()
+        shareButton = (ShareButton) findViewById(R.id.share_button);
+        /*ShareLinkContent content = new ShareLinkContent.Builder()
                 .setQuote("Du hast einen neuen Rekord aufgestellt!")
                 .build();
-        shareButton.setShareContent(content);
+
+        shareButton.setShareContent(content);*/
+        shareButton.setVisibility(View.INVISIBLE);
     }
 
     private void initTotalTextView() {
@@ -257,9 +264,11 @@ public class ProgressActivity extends AppCompatActivity {
     private void feedGraph(String exercise){
         if (exercise.equals(currentExercise)) {
             lineChart.setVisibility(View.INVISIBLE);
+            shareButton.setVisibility(View.INVISIBLE);
             currentExercise = "";
         } else {
             lineChart.setVisibility(View.VISIBLE);
+            shareButton.setVisibility(View.VISIBLE);
             currentExercise = exercise;
         }
 
@@ -283,7 +292,7 @@ public class ProgressActivity extends AppCompatActivity {
 
             float percIncrease = calculatePercentageIncrease(oneRMFirstEntry, oneRMLastEntry);
 
-            setGraphDescription(lineChart, percIncrease);
+            setGraphDescription(lineChart, percIncrease, exercise);
             LineDataSet dataSetLast = new LineDataSet(oneRMEntries, "1RM");
 
             LineData lineData = new LineData();
@@ -294,6 +303,7 @@ public class ProgressActivity extends AppCompatActivity {
             setDataSetLastStyle(dataSetLast);
 
             lineChart.invalidate();     //refresh chart
+            setFacebookShareContent();
         }
         else {
             lineChart.setVisibility(View.INVISIBLE);
@@ -302,10 +312,20 @@ public class ProgressActivity extends AppCompatActivity {
         workoutsDB.close();
     }
 
-    private void setGraphDescription(LineChart lineChart, float percIncrease) {
+    private void setFacebookShareContent() {
+        Bitmap image = lineChart.getChartBitmap();
+
+        SharePhoto photo = new SharePhoto.Builder().setBitmap(image).build();
+        SharePhotoContent content = new SharePhotoContent.Builder().addPhoto(photo).build();
+
+        shareButton.setShareContent(content);
+    }
+
+    private void setGraphDescription(LineChart lineChart, float percIncrease, String exerciseName) {
         Description description = new Description();
         if (percIncrease >= 0) {
-            description.setText(""+ percIncrease + "% 1RM increase since first record");
+            description.setText("" + exerciseName + ": " + percIncrease +
+                    "% 1RM increase since first record");
         }
         else {
             description.setText(""+ Math.abs(percIncrease) + "% 1RM decrease since first record");

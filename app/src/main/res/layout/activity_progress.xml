@@ -17,36 +17,36 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="200dp"
             android:id="@+id/total_text"
             android:gravity="center"
             android:text="@string/total_placeholder"
             android:textSize="40sp"
             app:layout_marginTopPercent="12%"/>
 
-        <RelativeLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_below="@+id/total_text">
+            android:layout_height="wrap_content"
+            app:layout_marginTopPercent="12%"
+            android:id="@+id/frame_layout">
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/progress_chart"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_below="@+id/toolbar"
+                android:background="@android:color/background_light"/>
+
 
             <com.facebook.share.widget.ShareButton
                 android:id="@+id/share_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:background="@color/colorPrimary"
-                />
+                android:background="@color/colorPrimary"/>
 
-        </RelativeLayout>
+        </FrameLayout>
 
 
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/progress_chart"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_below="@+id/toolbar"
-            app:layout_marginTopPercent="12%"
-            android:background="@android:color/background_light"/>
 
        <!-- <ScrollView
             android:layout_below="@+id/progress_chart"
@@ -58,7 +58,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/workouts_list"
-                android:layout_below="@+id/progress_chart"
+                android:layout_below="@+id/frame_layout"
                 app:layout_marginBottomPercent="10%">
 
             </ExpandableListView>

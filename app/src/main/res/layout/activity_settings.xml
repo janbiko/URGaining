@@ -11,8 +11,10 @@
         android:id="@+id/settings_logout_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/settings_login_button"
-        android:text="LOGOUT"/>
+        android:text="LOGOUT"
+        android:background="@color/colorPrimary"
+        android:layout_centerHorizontal="true"
+        app:layout_marginTopPercent="15%"/>
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/settings_login_button"
