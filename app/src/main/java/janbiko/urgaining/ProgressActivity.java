@@ -17,6 +17,8 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareButton;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
@@ -81,6 +83,16 @@ public class ProgressActivity extends AppCompatActivity {
         initExpandableList();
         calculateTotal();
         initTotalTextView();
+
+        initShareButton();
+    }
+
+    private void initShareButton() {
+        ShareButton shareButton = (ShareButton) findViewById(R.id.share_button);
+        ShareLinkContent content = new ShareLinkContent.Builder()
+                .setQuote("Du hast einen neuen Rekord aufgestellt!")
+                .build();
+        shareButton.setShareContent(content);
     }
 
     private void initTotalTextView() {
