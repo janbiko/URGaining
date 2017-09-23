@@ -4,6 +4,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +14,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -28,6 +33,9 @@ import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Created by Jannik on 20.09.2017.
@@ -49,7 +57,6 @@ public class SettingsActivity extends AppCompatActivity {
     //Facebook login
     LoginButton loginButton;
     CallbackManager callbackManager;
-    TextView textStatus;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,31 +70,39 @@ public class SettingsActivity extends AppCompatActivity {
 
         initPrefs();
         initUI();
+        /*
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "janbiko.urgaining",
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+
+        } catch (NoSuchAlgorithmException e) {
+
+        }*/
     }
 
     private void initLogin() {
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton) findViewById(R.id.settings_login_button);
-        textStatus = (TextView) findViewById(R.id.text_status_login);
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                String succ = "Success! Result: " + loginResult.toString();
-                textStatus.setText(succ);
                 // App code
             }
 
             @Override
             public void onCancel() {
-                String canc = "Cancelled!";
-                textStatus.setText(canc);
                 // App code
             }
 
             @Override
             public void onError(FacebookException exception) {
-                String err = "Error! Result: " + exception.toString();
-                textStatus.setText(err);
                 // App code
             }
         });
