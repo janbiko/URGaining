@@ -25,6 +25,7 @@ import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -36,6 +37,7 @@ import com.facebook.login.widget.LoginButton;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
 /**
  * Created by Jannik on 20.09.2017.
@@ -47,11 +49,14 @@ public class SettingsActivity extends AppCompatActivity {
     private static final String DELOAD_KEY = "DeloadValue";
     private static final String THEME_KEY = "ThemeValue";
     private static final String NOTIFICATION_KEY = "NotificationValue";
+    private static final String MAX_TRAINING_SESSIONS_KEY = "MaxTrainingSessions";
 
     private Spinner deloadSpinner;
     private Switch themeSwitch;
     private Switch notificationSwitch;
+    private Spinner maxTrainingSessionsSpinner;
     private SharedPreferences prefs;
+    private WorkoutsDatabase workoutsDB;
 
 
     //Facebook login
@@ -68,6 +73,7 @@ public class SettingsActivity extends AppCompatActivity {
         initLogin();
         initLogout();
 
+        initDatabase();
         initPrefs();
         initUI();
         /*
@@ -85,6 +91,10 @@ public class SettingsActivity extends AppCompatActivity {
         } catch (NoSuchAlgorithmException e) {
 
         }*/
+    }
+
+    private void initDatabase() {
+        workoutsDB = new WorkoutsDatabase(this);
     }
 
     private void initLogin() {
@@ -169,12 +179,22 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void initSpinner() {
         deloadSpinner = (Spinner) findViewById(R.id.deload_spinner);
-        Float[] values = new Float[] {0.95f, 0.9f, 0.85f, 0.8f, 0.75f, 0.7f, 0.65f, 0.6f, 0.55f, 0.5f};
+        Float[] values = new Float[] {0.95f, 0.9f, 0.85f, 0.8f, 0.75f, 0.7f, 0.65f, 0.6f, 0.55f,
+                0.5f};
         ArrayAdapter spinnerAdapter = new ArrayAdapter<>(SettingsActivity.this,
                 R.layout.support_simple_spinner_dropdown_item, values);
         spinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         deloadSpinner.setAdapter(spinnerAdapter);
         deloadSpinner.setSelection(spinnerAdapter.getPosition(getDeloadValue(this)));
+
+        maxTrainingSessionsSpinner = (Spinner) findViewById(R.id.max_training_sessions_spinner);
+        String[] vals = new String[] {"5", "10", "15", "20", "25", "50", "100", "All"};
+        ArrayAdapter spinnerAdapter2 = new ArrayAdapter<>(SettingsActivity.this,
+                R.layout.support_simple_spinner_dropdown_item, vals);
+        spinnerAdapter2.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        maxTrainingSessionsSpinner.setAdapter(spinnerAdapter2);
+        maxTrainingSessionsSpinner.setSelection(spinnerAdapter2.getPosition(
+                getMaxTrainingSessions(this)));
     }
 
     private void saveDeloadValue(String s) {
@@ -188,6 +208,18 @@ public class SettingsActivity extends AppCompatActivity {
     public float getDeloadValue(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         return prefs.getFloat(DELOAD_KEY, 0.8f);
+    }
+
+    private void saveMaxTrainingSessions(String s) {
+        deleteRedundantExerciseValues();
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(MAX_TRAINING_SESSIONS_KEY, s);
+        editor.apply();
+    }
+
+    public String getMaxTrainingSessions(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        return prefs.getString(MAX_TRAINING_SESSIONS_KEY, "All");
     }
 
     private void saveThemeCheckerValue() {
@@ -220,6 +252,46 @@ public class SettingsActivity extends AppCompatActivity {
         saveDeloadValue(deloadSpinner.getSelectedItem().toString());
         saveThemeCheckerValue();
         saveNotificationCheckerValue();
+        saveMaxTrainingSessions(maxTrainingSessionsSpinner.getSelectedItem().toString());
+    }
+
+    private void deleteRedundantExerciseValues() {
+        // deletes oldest exercise values, if more than the max amount of exercise values exist
+        // in the database
+
+        workoutsDB.open();
+        if (!getMaxTrainingSessions(this).equals("All")) {
+            ArrayList<String> exercises = new ArrayList<>();
+            int maxTrainingSessions = Integer.parseInt(getMaxTrainingSessions(this));
+
+            for (int i = 0; i < workoutsDB.getAllExerciseItems().size(); i++) {
+                exercises.add(workoutsDB.getAllExerciseItems().get(i).getName());
+            }
+
+            for (int i = 0; i < exercises.size(); i++) {
+                for (int j = 0; j < workoutsDB.getAllExerciseValuesItems(exercises.get(i)).size();
+                     j++) {
+                    ArrayList<ArrayList<Float>> exVals = workoutsDB.
+                            getAllExerciseValuesItems(exercises.get(i));
+
+                    if (exVals.size() > maxTrainingSessions) {
+                        for (int k = 0; k < exVals.size(); k++) {
+                            if (exVals.size() == maxTrainingSessions) break;
+                            exVals.remove(0);
+                        }
+                    }
+
+                    workoutsDB.removeExerciseValues(exercises.get(i));
+                    long timeStamp = System.currentTimeMillis() / 100;
+
+                    for (int k = 0; k < exVals.size(); k++) {
+                        workoutsDB.insertExerciseValuesItem(exercises.get(i), exVals.get(k),
+                                timeStamp + k);
+                    }
+                }
+            }
+        }
+        workoutsDB.close();
     }
 
     @Override

@@ -21,6 +21,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 /**
  * Created by Jannik on 15.09.2017.
@@ -32,6 +33,7 @@ public class ExercisesActivity extends AppCompatActivity {
     private static final String ALERT_NEGATIVE_BUTTON = "No";
 
     private String workoutName;
+    private SettingsActivity settings;
 
     private ArrayList<String> listItems = new ArrayList<>();
     private ArrayAdapter<String> listAdapter;
@@ -42,17 +44,62 @@ public class ExercisesActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workouts);
-
+        initSettings();
         getWorkoutName();
 
         initDatabase();
         initUI();
+        deleteRedundantExerciseValues();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         refreshArrayList();
+        deleteRedundantExerciseValues();
+    }
+
+    private void initSettings() {
+        settings = new SettingsActivity();
+    }
+
+    private void deleteRedundantExerciseValues() {
+        // deletes oldest exercise values, if more than the max amount for exercise values exist
+        // in the database
+
+        workoutsDB.open();
+        if (!settings.getMaxTrainingSessions(this).equals("All")) {
+            ArrayList<String> exercises = new ArrayList<>();
+            int maxTrainingSessions = Integer.parseInt(settings.getMaxTrainingSessions(this));
+
+            for (int i = 0; i < workoutsDB.getAllExerciseItems().size(); i++) {
+                exercises.add(workoutsDB.getAllExerciseItems().get(i).getName());
+            }
+
+            for (int i = 0; i < exercises.size(); i++) {
+                for (int j = 0; j < workoutsDB.getAllExerciseValuesItems(exercises.get(i)).size();
+                     j++) {
+                    ArrayList<ArrayList<Float>> exVals = workoutsDB.
+                            getAllExerciseValuesItems(exercises.get(i));
+
+                    if (exVals.size() > maxTrainingSessions) {
+                        for (int k = 0; k < exVals.size(); k++) {
+                            if (exVals.size() == maxTrainingSessions) break;
+                            exVals.remove(0);
+                        }
+                    }
+
+                    workoutsDB.removeExerciseValues(exercises.get(i));
+                    long timeStamp = System.currentTimeMillis() / 100;
+
+                    for (int k = 0; k < exVals.size(); k++) {
+                        workoutsDB.insertExerciseValuesItem(exercises.get(i), exVals.get(k),
+                                timeStamp + k);
+                    }
+                }
+            }
+        }
+        workoutsDB.close();
     }
 
     private void initDatabase() {

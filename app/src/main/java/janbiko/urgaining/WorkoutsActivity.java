@@ -40,6 +40,7 @@ public class WorkoutsActivity extends AppCompatActivity
 
         initDatabase();
         initUI();
+
     }
 
     @Override
