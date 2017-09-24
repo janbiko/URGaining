@@ -30,4 +30,14 @@
 
     <string name="deload">Deload Amount</string>
     <string name="max_training_sessions">Max amount of training \nsessions saved</string>
+    <string-array name="amount_training_sessions_saved">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>25</item>
+        <item>50</item>
+        <item>100</item>
+        <item>All</item>
+    </string-array>
 </resources>

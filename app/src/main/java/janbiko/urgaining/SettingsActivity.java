@@ -95,9 +95,11 @@ public class SettingsActivity extends AppCompatActivity {
     private void initUI() {
         initSpinner();
 
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)
+                findViewById(R.id.navigation);
         bottomNavigationView.setSelectedItemId(R.id.navigation_settings);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch(item.getItemId())
@@ -132,7 +134,7 @@ public class SettingsActivity extends AppCompatActivity {
         deloadSpinner.setSelection(spinnerAdapter.getPosition(getDeloadValue(this)));
 
         maxTrainingSessionsSpinner = (Spinner) findViewById(R.id.max_training_sessions_spinner);
-        String[] vals = new String[] {"5", "10", "15", "20", "25", "50", "100", "All"};
+        String[] vals = getResources().getStringArray(R.array.amount_training_sessions_saved);
         ArrayAdapter spinnerAdapter2 = new ArrayAdapter<>(SettingsActivity.this,
                 R.layout.support_simple_spinner_dropdown_item, vals);
         spinnerAdapter2.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);

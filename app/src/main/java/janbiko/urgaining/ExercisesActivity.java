@@ -106,7 +106,8 @@ public class ExercisesActivity extends AppCompatActivity {
         initButtons();
         initListViews();
 
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)
+                findViewById(R.id.navigation);
         bottomNavigationView.setSelectedItemId(R.id.navigation_workout);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -242,7 +243,8 @@ public class ExercisesActivity extends AppCompatActivity {
     }
 
     private void initButtons() {
-        FloatingActionButton addExerciseButton = (FloatingActionButton) findViewById(R.id.add_button);
+        FloatingActionButton addExerciseButton = (FloatingActionButton)
+                findViewById(R.id.add_button);
         addExerciseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
