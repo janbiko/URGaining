@@ -256,6 +256,55 @@ public class ExercisesActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        Button resetButton = (Button) findViewById(R.id.reset_button);
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createResetAlert();
+            }
+        });
+    }
+
+    private void createResetAlert() {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+        alertBuilder.setMessage("Are you sure you want to reset all stored training sessions of " +
+                "this workout, except the latest?");
+        alertBuilder.setCancelable(false);
+        alertBuilder.setPositiveButton(ALERT_POSITIVE_BUTTON, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                resetExerciseValues();
+            }
+        });
+        alertBuilder.setNegativeButton(ALERT_NEGATIVE_BUTTON, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+        AlertDialog alert = alertBuilder.create();
+        alert.show();
+    }
+
+    private void resetExerciseValues() {
+        workoutsDB.open();
+        ArrayList<String> exercises = new ArrayList<>();
+
+        for (int i = 0; i < workoutsDB.getAllExerciseItems().size(); i++) {
+            if (workoutsDB.getAllExerciseItems().get(i).getWorkoutName().equals(workoutName)) {
+                exercises.add(workoutsDB.getAllExerciseItems().get(i).getName());
+            }
+        }
+        long timestamp = System.currentTimeMillis() / 100;
+        for (int i = 0; i < exercises.size(); i++) {
+            if (workoutsDB.getLatestExerciseValuesItem(exercises.get(i)).size() > 0) {
+                ArrayList<Float> latestValues = workoutsDB.getLatestExerciseValuesItem(
+                        exercises.get(i));
+                workoutsDB.removeExerciseValues(exercises.get(i));
+                workoutsDB.insertExerciseValuesItem(exercises.get(i), latestValues, timestamp + i);
+            }
+        }
     }
 
     public void getWorkoutName() {

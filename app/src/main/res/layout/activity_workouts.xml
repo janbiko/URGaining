@@ -27,10 +27,22 @@
         android:clickable="true"
         app:layout_marginBottomPercent="3%"
         app:layout_marginRightPercent="3%"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_above="@+id/bottom_layout"
         app:fabSize="normal"
         app:srcCompat="@android:drawable/ic_input_add" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/reset_button"
+        android:layout_toStartOf="@+id/add_button"
+        android:layout_above="@+id/bottom_layout"
+        app:layout_marginRightPercent="3%"
+        app:layout_marginBottomPercent="3%"
+        android:background="@color/colorAccent"
+        android:text="@string/reset_button"
+        />
 
     <LinearLayout
         android:id="@+id/bottom_layout"

@@ -21,6 +21,8 @@
     <string name="weight">Weight</string>
     <string name="values_hint">0</string>
 
+    <string name="reset_button">Reset\nWorkout</string>
+
     <string name="add_values_button">Finish</string>
     <string name="deload_button">Deload</string>
     <string name="search">Search</string>
