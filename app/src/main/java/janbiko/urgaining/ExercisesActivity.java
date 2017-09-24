@@ -111,6 +111,7 @@ public class ExercisesActivity extends AppCompatActivity {
         initListViews();
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_workout);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

@@ -145,6 +145,7 @@ public class SettingsActivity extends AppCompatActivity {
         initSwitches();
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_settings);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

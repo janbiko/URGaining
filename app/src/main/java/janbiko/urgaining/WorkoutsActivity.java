@@ -59,6 +59,7 @@ public class WorkoutsActivity extends AppCompatActivity
         initListViews();
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_workout);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -69,8 +70,6 @@ public class WorkoutsActivity extends AppCompatActivity
                         startActivity(iP);
                         break;
                     case R.id.navigation_workout:
-                        Intent iW = new Intent(WorkoutsActivity.this, WorkoutsActivity.class);
-                        startActivity(iW);
                         break;
                     case R.id.navigation_settings:
                         Intent iS = new Intent(WorkoutsActivity.this, SettingsActivity.class);

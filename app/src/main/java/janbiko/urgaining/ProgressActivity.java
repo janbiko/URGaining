@@ -57,6 +57,7 @@ public class ProgressActivity extends AppCompatActivity {
         setContentView(R.layout.activity_progress);
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_progress);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
