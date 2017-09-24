@@ -307,6 +307,7 @@ public class ProgressActivity extends AppCompatActivity {
         }
         else {
             lineChart.setVisibility(View.INVISIBLE);
+            shareButton.setVisibility(View.INVISIBLE);
             Toast.makeText(getApplicationContext(), "No data available.", Toast.LENGTH_LONG).show();
         }
         workoutsDB.close();
