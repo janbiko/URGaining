@@ -12,7 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Switch;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -31,13 +30,9 @@ public class SettingsActivity extends AppCompatActivity {
 
     private static final String PREFS_NAME = "AppPrefs";
     private static final String DELOAD_KEY = "DeloadValue";
-    private static final String THEME_KEY = "ThemeValue";
-    private static final String NOTIFICATION_KEY = "NotificationValue";
     private static final String MAX_TRAINING_SESSIONS_KEY = "MaxTrainingSessions";
 
     private Spinner deloadSpinner;
-    private Switch themeSwitch;
-    private Switch notificationSwitch;
     private Spinner maxTrainingSessionsSpinner;
     private SharedPreferences prefs;
     private WorkoutsDatabase workoutsDB;
@@ -99,7 +94,6 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void initUI() {
         initSpinner();
-        initSwitches();
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         bottomNavigationView.setSelectedItemId(R.id.navigation_settings);
@@ -125,14 +119,6 @@ public class SettingsActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-    }
-
-    private void initSwitches() {
-        themeSwitch = (Switch) findViewById(R.id.dark_theme_switch);
-        themeSwitch.setChecked(getThemeCheckerValue(this));
-
-        notificationSwitch = (Switch) findViewById(R.id.notification_switch);
-        notificationSwitch.setChecked(getNotificationCheckerValue(this));
     }
 
     private void initSpinner() {
@@ -180,36 +166,8 @@ public class SettingsActivity extends AppCompatActivity {
         return prefs.getString(MAX_TRAINING_SESSIONS_KEY, "All");
     }
 
-    private void saveThemeCheckerValue() {
-        boolean value = themeSwitch.isChecked();
-
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean(THEME_KEY, value);
-        editor.apply();
-    }
-
-    static public boolean getThemeCheckerValue(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        return prefs.getBoolean(THEME_KEY, true);
-    }
-
-    private void saveNotificationCheckerValue() {
-        boolean value = notificationSwitch.isChecked();
-
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean(NOTIFICATION_KEY, value);
-        editor.apply();
-    }
-
-    static public boolean getNotificationCheckerValue(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        return prefs.getBoolean(NOTIFICATION_KEY, true);
-    }
-
     private void savePreferences() {
         saveDeloadValue(deloadSpinner.getSelectedItem().toString());
-        saveThemeCheckerValue();
-        saveNotificationCheckerValue();
         saveMaxTrainingSessions(maxTrainingSessionsSpinner.getSelectedItem().toString());
     }
 

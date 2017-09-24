@@ -34,45 +34,9 @@
         />
 
     <TextView
-        android:id="@+id/setting_notifications"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/setting_deload"
-        app:layout_marginTopPercent="10%"
-        app:layout_marginLeftPercent="5%"
-        android:text="@string/notifications"/>
-
-
-    <Switch
-        android:id="@+id/notification_switch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/setting_deload"
-        app:layout_marginTopPercent="10%"
-        android:layout_alignParentEnd="true"
-        app:layout_marginRightPercent="10%"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/setting_notifications"
-        app:layout_marginTopPercent="10%"
-        app:layout_marginLeftPercent="5%"
-        android:text="@string/dark_theme"/>
-    <Switch
-        android:id="@+id/dark_theme_switch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/setting_notifications"
-        app:layout_marginTopPercent="10%"
-        android:layout_alignParentEnd="true"
-        app:layout_marginRightPercent="10%"/>
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/dark_theme_switch"
+        android:layout_below="@id/deload_spinner"
         app:layout_marginTopPercent="10%"
         app:layout_marginLeftPercent="5%"
         android:text="@string/max_training_sessions"/>
@@ -80,7 +44,7 @@
         android:id="@+id/max_training_sessions_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/dark_theme_switch"
+        android:layout_below="@id/deload_spinner"
         app:layout_marginTopPercent="10%"
         android:layout_alignParentEnd="true"
         app:layout_marginRightPercent="10%"
