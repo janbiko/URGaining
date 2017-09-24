@@ -180,7 +180,7 @@ public class ExerciseDetails extends Activity{
 
         // checks if user put in a value for every set
         if (exerciseValues.size() != sets * 2) {
-            Toast.makeText(getApplicationContext(), "Please enter valid numbers.",
+            Toast.makeText(getApplicationContext(), "Please fill in a value for every input field.",
                     Toast.LENGTH_SHORT).show();
         } else if (exerciseValues.size() == sets * 2 && exerciseValues.size() <=
                 exerciseValuesSize) {
