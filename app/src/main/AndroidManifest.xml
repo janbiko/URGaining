@@ -19,11 +19,7 @@
         <provider android:authorities="com.facebook.app.FacebookContentProvider130439840871072"
             android:name="com.facebook.FacebookContentProvider"
             android:exported="true"/>
-        <activity
-            android:name=".MainActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait">
-        </activity>
+
         <activity
             android:name=".WorkoutsActivity"
             android:screenOrientation="portrait">
@@ -74,9 +70,6 @@
 
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
-        </activity>
-        <activity android:name=".LoginActivity"
-            android:screenOrientation="portrait">
         </activity>
         <activity android:name=".SettingsActivity"
             android:screenOrientation="portrait">

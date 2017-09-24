@@ -13,12 +13,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareButton;
@@ -95,11 +93,6 @@ public class ProgressActivity extends AppCompatActivity {
 
     private void initShareButton() {
         shareButton = (ShareButton) findViewById(R.id.share_button);
-        /*ShareLinkContent content = new ShareLinkContent.Builder()
-                .setQuote("Du hast einen neuen Rekord aufgestellt!")
-                .build();
-
-        shareButton.setShareContent(content);*/
         shareButton.setVisibility(View.INVISIBLE);
     }
 
@@ -348,16 +341,12 @@ public class ProgressActivity extends AppCompatActivity {
     }
 
     private void setGraphAxisStyle(LineChart lineChart, int dataSize){
-        float minYValue = 80f;
-        float maxYValue = 180f;
 
         YAxis right = lineChart.getAxisRight();
         right.setDrawGridLines(false);
         right.setDrawLabels(false);
 
-        YAxis left = lineChart.getAxisLeft();
-        //left.setAxisMinimum(minYValue);
-        //left.setAxisMaximum(maxYValue);
+
 
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setDrawGridLines(false);
