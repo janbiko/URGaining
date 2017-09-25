@@ -51,6 +51,7 @@ public class ProgressActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        checkAndSetTheme()
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_progress);
 
@@ -366,6 +367,22 @@ public class ProgressActivity extends AppCompatActivity {
         dataSet.setCircleColor(Color.GREEN);
         dataSet.setLineWidth(2.5f);
         dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+    }
+      public void checkAndSetTheme(){
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        final boolean useDarkTheme = preferences.getBoolean(PREF_DARK_THEME, false);
+        final boolean usePinkTheme = preferences.getBoolean(PREF_PINK_THEME, false);
+        final boolean useNormalTheme = preferences.getBoolean(PREF_NORMAL_THEME, false);
+        if(useDarkTheme) {
+            setTheme(R.style.AppTheme_Dark);
+        }
+        if (usePinkTheme){
+            setTheme(R.style.AppTheme_Pink);
+        }
+        if (useNormalTheme){
+            setTheme(R.style.AppTheme);
+        }
+
     }
 
 }
