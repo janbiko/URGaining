@@ -31,7 +31,12 @@ public class SettingsActivity extends AppCompatActivity {
     private static final String PREFS_NAME = "AppPrefs";
     private static final String DELOAD_KEY = "DeloadValue";
     private static final String MAX_TRAINING_SESSIONS_KEY = "MaxTrainingSessions";
-
+    
+    private static final String PREF_DARK_THEME = "dark_theme";
+    private static final String PREF_PINK_THEME = "pink_theme";
+    private static final String PREF_NORMAL_THEME  ="normal_theme";
+    
+    private int pos;
     private Spinner deloadSpinner;
     private Spinner maxTrainingSessionsSpinner;
     private SharedPreferences prefs;
@@ -44,6 +49,8 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        checkAndSetTheme();
+        
         super.onCreate(savedInstanceState);
 
         FacebookSdk.sdkInitialize(getApplicationContext());
@@ -54,6 +61,8 @@ public class SettingsActivity extends AppCompatActivity {
         initDatabase();
         initPrefs();
         initUI();
+        
+        initColorSpinner();
     }
 
     private void initDatabase() {
@@ -210,6 +219,81 @@ public class SettingsActivity extends AppCompatActivity {
             }
         }
         workoutsDB.close();
+    }
+    
+     private void checkAndSetTheme(){
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        final boolean useDarkTheme = preferences.getBoolean(PREF_DARK_THEME, false);
+        final boolean usePinkTheme = preferences.getBoolean(PREF_PINK_THEME, false);
+        final boolean useNormalTheme = preferences.getBoolean(PREF_NORMAL_THEME, false);
+        if(useDarkTheme) {
+            setTheme(R.style.AppTheme_Dark);
+        }
+        if (usePinkTheme){
+            setTheme(R.style.AppTheme_Pink);
+        }
+        if (useNormalTheme){
+            setTheme(R.style.AppTheme);
+        }
+
+    }
+    private void initColorSpinner(){
+
+        String[] spinnerArray ={"Normal","Dark","Pink"};
+        Spinner spinner = (Spinner)findViewById(R.id.spinner_color);
+        spinner.setPrompt("Farben");
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray); //selected item will look like a spinner set from XML
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerArrayAdapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                pos = arg2;
+                chooseTheme(pos);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
+
+    }
+    private void chooseTheme(int nr){
+        SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
+        if(nr == 0){
+            editor.putBoolean(PREF_NORMAL_THEME, true);
+            editor.putBoolean(PREF_DARK_THEME, false);
+            editor.putBoolean(PREF_PINK_THEME, false);
+            editor.apply();
+
+            Intent intent = getIntent();
+            finish();
+
+            startActivity(intent);
+        }
+        if(nr == 1){
+            editor.putBoolean(PREF_NORMAL_THEME, false);
+            editor.putBoolean(PREF_DARK_THEME, true);
+            editor.putBoolean(PREF_PINK_THEME, false);
+            editor.apply();
+
+            Intent intent = getIntent();
+            finish();
+
+            startActivity(intent);
+        }
+        if(nr==2){
+            editor.putBoolean(PREF_NORMAL_THEME, false);
+            editor.putBoolean(PREF_DARK_THEME, false);
+            editor.putBoolean(PREF_PINK_THEME, true);
+            editor.apply();
+
+            Intent intent = getIntent();
+            finish();
+
+            startActivity(intent);
+        }
+
     }
 
     @Override
