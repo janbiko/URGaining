@@ -40,4 +40,12 @@
         <item>100</item>
         <item>All</item>
     </string-array>
+    
+    <string name="color_spinner">Wähle ein Farbschema </string>
+    <string-array name="color_array">
+        <item>Normal</item>
+        <item>Dark</item>
+        <item>Pink</item>
+    </string-array>
+    
 </resources>
